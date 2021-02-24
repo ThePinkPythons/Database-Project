@@ -4,8 +4,20 @@ The CS3250 project for the Pink Panthers
 
 # Team
 
-Theo White
-Erica White
-Joseph Barrazza
-Roray Oguma
-Andrew Evans
+- Theo White 
+  
+- Erica White
+
+- Joseph Barrazza
+
+- Roray Oguma
+
+- Andrew Evans
+
+# Technologies
+
+ - Python3.8+
+
+ - SQL Lite
+
+ - Discord
