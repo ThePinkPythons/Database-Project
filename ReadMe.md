@@ -21,3 +21,13 @@ The CS3250 project for the Pink Panthers
  - SQL Lite
 
  - Discord
+
+
+# CSV Reader
+
+Uses an iterative approach to reading and export files and includes
+a SQL interface to SQL lite for obtaining data.
+
+# Chat Bot
+
+Uses discord to interact with individuals
