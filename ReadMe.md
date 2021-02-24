@@ -30,4 +30,4 @@ a SQL interface to SQL lite for obtaining data.
 
 # Chat Bot
 
-Uses discord to interact with individuals
+Uses discord to interact with individuals intelligently.
