@@ -1,4 +1,3 @@
-import discord
 
 async def handle(message):
     if message.content.startswith('!Cancel'):
