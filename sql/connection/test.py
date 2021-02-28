@@ -4,7 +4,7 @@ Test sqllite 3 connection
 
 import unittest
 
-from sql.connection.factory import Database
+from sql.connection.singleton import Database
 
 
 class SQLLiteTests(unittest.TestCase):
