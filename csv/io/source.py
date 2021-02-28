@@ -13,17 +13,19 @@ class CSVSource:
     Intended to offer download and read support from a file
     """
 
-    def __init__(self, fpath, batch_size=100):
+    def __init__(self, fpath, headers=None, batch_size=100):
         """
         Constructor
 
         :param fpath:   The file path to the csv
+        :param headers: Headers to read in the order they appear in the fle
         :param batch_size:  The overall batch size
         """
         assert fpath
         self._fpath = fpath
         self._batch_size = batch_size
         self._fp = None
+        self._headers = headers
         self._do_read = True
         self._reader = None
 
@@ -39,7 +41,7 @@ class CSVSource:
         """
         self._fp = open(self._fpath, newline='\x0a')
         print(self._fp)
-        self._reader = csv.DictReader(self._fp)
+        self._reader = csv.DictReader(self._fp, fieldnames=self._headers)
 
     def __iter__(self):
         """
