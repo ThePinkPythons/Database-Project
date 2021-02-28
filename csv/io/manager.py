@@ -4,12 +4,12 @@ Entry point utilities for reading csv and storing in sql
 
 import sqlite3
 
-from csv.reader.csv import CSVSource
+from csv.io.source import CSVSource
 
 
-def read_csv_to_sql(filepath, db, table, headers=None):
+def write_csv_to_sql(filepath, db, table="products", headers=None):
     """
-    Reads the csv from the file path to the specified table
+    Writes a given CSV to a table
 
     :param filepath:    The file path
     :param db:  The database object
@@ -21,7 +21,7 @@ def read_csv_to_sql(filepath, db, table, headers=None):
         print(row)
 
 
-def write_csv_from_sql(db, fpath,table="products"):
+def read_csv_from_sql(db, sql, fpath, table="products"):
     """
     Writes the csv file stored in the database to the file
 

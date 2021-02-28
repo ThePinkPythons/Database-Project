@@ -21,10 +21,32 @@ Options:
   --headers=<headers>      Headers for the csv file in the order they appear
   --db=<db>                Database to use
 """
+import json
 
 from docopt import docopt
+
+from sql.connection.singleton import Database
+
+
+def build_db(database, table, headers):
+    """
+    Build the data store
+
+    :param database:    The database
+    :param table:   Table to use
+    :param headers: Headers to use
+    :return: A prebuilt database object
+    """
+    db = Database.instance(database, table, headers)
+
+
 
 
 if __name__ == "__main__":
     arguments = docopt(__doc__, version='Database Project 0.1')
-    database = arguments.get()
+    database = arguments.get("--database", "project.db")
+    table = arguments.get("--table", "data")
+    headers = arguments.get("--headers", None)
+    if headers:
+        headers = json.loads(headers)
+    Database.instance(database, table, headers)

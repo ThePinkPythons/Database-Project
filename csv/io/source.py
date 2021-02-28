@@ -1,5 +1,5 @@
 """
-CSV source reader
+CSV source io
 """
 import codecs
 import os
@@ -142,9 +142,9 @@ class S3CSVSource:
 
     def get_next_reader(self):
         """
-        Get the next reader from the keys
+        Get the next io from the keys
 
-        :return: The reader or None
+        :return: The io or None
         """
         if self._keys and len(self._keys) > 0:
             self._key = self._keys.pop()
