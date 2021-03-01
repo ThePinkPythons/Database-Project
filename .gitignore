@@ -3,3 +3,4 @@ code.txt
 .project
 __pycache__
 data
+*.db
