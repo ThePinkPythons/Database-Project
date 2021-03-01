@@ -4,6 +4,8 @@ SQL Lite connector
 
 import sqlite3
 
+from db.sql.query.utilities import get_create_statement
+
 
 class Database(object):
     """
@@ -36,19 +38,3 @@ class Database(object):
             if mapping and table:
                 cls._instance.execute(sql)
         return cls._instance
-
-
-def get_create_statement(table, mapping):
-    """
-    Creates the sql table create statement
-    
-    :param table:   Table to create 
-    :param mapping:   Mapping of attributes and values
-    :return:    The SQL statement
-    """
-    sql = "CREATE TABLE {} (".format(table)
-    columns = []
-    for (k, v) in mapping.items():
-        columns.append("{} {}".format(k, v))
-    sql = "{}{})".format(sql, ",".join(columns))
-    return sql

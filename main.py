@@ -18,14 +18,14 @@ Options:
   -h --help                Show this screen.
   --version                Show version.
   --table=<table>          Name of the table in sqlite3
-  --headers=<headers>      Headers for the csv file in the order they appear
+  --headers=<headers>      Headers for the db file in the order they appear
   --db=<db>                Database to use
 """
 import json
 
 from docopt import docopt
 
-from sql.connection.singleton import Database
+from db.sql import Database
 
 
 def build_db(database, table, headers):

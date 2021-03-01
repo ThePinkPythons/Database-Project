@@ -17,7 +17,7 @@ class CSVSource:
         """
         Constructor
 
-        :param fpath:   The file path to the csv
+        :param fpath:   The file path to the db
         :param headers: Headers to read in the order they appear in the fle
         :param batch_size:  The overall batch size
         """
@@ -121,7 +121,7 @@ class S3CSVSource:
             else:
                 kl = self._boto.resource("s3")
             kl = kl.Bucket(self._bucket)
-            objects = [x.key for x in kl.objects.all() if self._filter in x.key and ".csv" in x.key]
+            objects = [x.key for x in kl.objects.all() if self._filter in x.key and ".db" in x.key]
             return objects
         else:
             return None

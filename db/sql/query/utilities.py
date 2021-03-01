@@ -69,3 +69,33 @@ def delete_record(table, where):
     :return: The sql
     """
     return "DELETE FROM {} WHERE {}".format(table, where)
+
+
+def create_insert(table, keys):
+    """
+    Create an insert statement
+
+    :param table:   The table to insert into
+    :param keys:    The keys
+    :return:    The query
+    """
+    conditions = ["?" for x in keys]
+    query = "INSERT INTO {} ({}})".format(table, ",".join(keys))
+    query = "{} VALUES({})".format(query, ",".join(conditions))
+    return query
+
+
+def get_create_statement(table, mapping):
+    """
+    Creates the sql table create statement
+
+    :param table:   Table to create
+    :param mapping:   Mapping of attributes and values
+    :return:    The SQL statement
+    """
+    sql = "CREATE TABLE {} (".format(table)
+    columns = []
+    for (k, v) in mapping.items():
+        columns.append("{} {}".format(k, v))
+    sql = "{}{})".format(sql, ",".join(columns))
+    return sql
