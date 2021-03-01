@@ -40,7 +40,6 @@ class CSVSource:
         Download the S3 target file or files. Used when stream is False
         """
         self._fp = open(self._fpath, newline='\x0a')
-        print(self._fp)
         self._reader = csv.DictReader(self._fp, fieldnames=self._headers)
 
     def __iter__(self):

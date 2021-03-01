@@ -13,8 +13,8 @@ class CSVSink(object):
         :param fpath:   The file path
         :param headers: The headers to use
         """
-        self._fp = open(fpath, 'w')
-        self._writer = csv.DictWriter(fpath, fieldnames=headers)
+        self._fp = open(fpath, 'w', newline='')
+        self._writer = csv.DictWriter(self._fp, fieldnames=headers)
         self._writer.writeheader()
 
     def close(self):

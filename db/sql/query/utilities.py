@@ -13,15 +13,15 @@ def create_select(table, fields=["*"], where=None, group=None, order=None, limit
     :param limit:   Maximum number of records to return
     :param fields: Fields to select from
     """
-    sql = "SELECT {} FROM {}".format(table, ",".join(fields))
+    sql = "SELECT {} FROM {}".format(",".join(fields), table)
     if where:
-        sql += "{} WHERE {}".format(sql, where)
+        sql = "{} WHERE {}".format(sql, where)
     if group:
-        sql += "{} GROUP BY {}".format(sql, group)
+        sql = "{} GROUP BY {}".format(sql, group)
     if order:
-        sql += "{} ORDER BY {}".format(sql, order)
+        sql = "{} ORDER BY {}".format(sql, order)
     if limit:
-        sql += "{} LIMIT {}".format(sql, limit)
+        sql = "{} LIMIT {}".format(sql, limit)
     return sql
 
 
@@ -36,7 +36,7 @@ def create_insert_sql(table, value_dict):
     keys = value_dict.keys()
     values = ",".join(["?" for x in keys])
     sql = "INSERT INTO {}".format(table)
-    sql += "{}({}) ({})".format(sql, ",".join(keys), values)
+    sql = "{}({}) ({})".format(sql, ",".join(keys), values)
     return sql
 
 
@@ -53,10 +53,12 @@ def create_update_sql(table, value_dict, where=None):
     for key in value_dict.keys():
         data = value_dict[key]
         if type(data) is str:
-            updates.append([key, "'{}'".format(data)])
+            updates.append("{} = '{}'".format(key, data))
+        else:
+            updates.append("{} = {}".format(key, data))
     sql = "UPDATE {} SET {}".format(table, ",".join(updates))
     if where:
-        sql += "{} WHERE {}".format(sql, where)
+        sql = "{} WHERE {}".format(sql, where)
     return sql
 
 
@@ -80,7 +82,7 @@ def create_insert(table, keys):
     :return:    The query
     """
     conditions = ["?" for x in keys]
-    query = "INSERT INTO {} ({}})".format(table, ",".join(keys))
+    query = "INSERT INTO {} ({})".format(table, ",".join(keys))
     query = "{} VALUES({})".format(query, ",".join(conditions))
     return query
 

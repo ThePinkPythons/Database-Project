@@ -1,7 +1,7 @@
 """
 A query using the decorator pattern
 """
-from db.sql import create_select, create_update_sql, delete_record, create_insert
+from db.sql.query.utilities import create_select, create_update_sql, delete_record, create_insert
 
 
 class BaseQuery(object):
@@ -89,7 +89,7 @@ class Select(BaseQuery):
         :param order:   Order clause
         :param limit:   Maximum number of records to reurn
         """
-        super().__init__(self)
+        super().__init__()
         self._table = table
         self._fields = fields
         self._group = group
@@ -123,6 +123,7 @@ class Update(BaseQuery):
         :param table:   Table to update
         :param mapping: Update mapping
         """
+        super().__init__()
         self._table = table
         self._mapping = mapping
 
@@ -150,6 +151,7 @@ class Delete(BaseQuery):
 
         :param table:   The table to insert into
         """
+        super().__init__()
         self._table = table
 
     def __str__(self):
@@ -158,8 +160,8 @@ class Delete(BaseQuery):
 
         :return:    The query string
         """
-        if len(self._conditions):
-            where = " AND ".format(self._conditions)
+        if len(self._conditions) > 0:
+            where = " AND ".join(self._conditions)
         else:
             where = None
         return delete_record(self._table, where)
@@ -172,11 +174,12 @@ class Create(BaseQuery):
 
     def __init__(self, table, keys):
         """
-        Constrcutor
+        Constructor
 
         :param table:   The table
         :param keys:    The keys to insert
         """
+        super().__init__()
         self._table = table
         self._keys = keys
 

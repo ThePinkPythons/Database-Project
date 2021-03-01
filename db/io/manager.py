@@ -6,10 +6,10 @@ from db.crud.executor import create_records
 from db.io.sink import CSVSink
 from db.io.source import CSVSource
 from db.sql.connection.singleton import Database
-from db.sql.query.builder import Select
+from db.sql.query.builder import Select, Create
 
 
-def write_csv_to_sql(filepath, db=":memory:", table="products", headers=None, table_mappings=None, batch_size=100):
+def write_csv_to_sql(filepath, db=":memory:", table="products", headers=None, has_headers=False, table_mappings=None, batch_size=100):
     """
     Writes a given CSV to a table
 
@@ -17,13 +17,21 @@ def write_csv_to_sql(filepath, db=":memory:", table="products", headers=None, ta
     :param db:  The database object
     :param table:   Name of the table
     :param headers: Headers list in the order they appear in the db
+    :param has_headers: The headers
     :param table_mappings:  Table mappings for creation or None to avoid table creation
     :param batch_size:  Number of records per batch
     """
-    conn = Database.instance(db, table, table_mappings)
-    csv = CSVSource(filepath, headers=headers, batch_size=batch_size)
-    for batch in csv:
-        create_records(conn, batch)
+    _conn = Database.instance(db, table, table_mappings)
+    csv_headers = None
+    if has_headers is False:
+        csv_headers = headers
+    csv = CSVSource(filepath, headers=csv_headers, batch_size=batch_size)
+    try:
+        for batch in csv:
+            query = Create(table, headers)
+            create_records(headers, query, batch)
+    finally:
+        csv.close()
 
 
 def write_csv_from_sql(db, headers, fpath, table="products", batch_size=10000):

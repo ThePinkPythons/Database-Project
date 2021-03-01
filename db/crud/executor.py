@@ -1,6 +1,8 @@
 """
 Executes CRUD operations on the sqlite database.
 """
+import copy
+
 from db.sql.connection.singleton import Database
 
 
@@ -36,7 +38,7 @@ def update_record(query):
     c.close()
 
 
-def get_record(query, generator=False):
+def get_record(query):
     """
     Select records
 
@@ -47,13 +49,9 @@ def get_record(query, generator=False):
     query = str(query)
     db = Database.instance(None)
     c = db.cursor()
-    it = c.execute(query)
-    if generator:
-        for row in it:
-            yield row
-        c.close()
-    else:
-        return it.fetchall()
+    for row in c.execute(query):
+        yield row
+    c.close()
 
 
 def delete_record(query):
