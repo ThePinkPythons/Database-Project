@@ -1,8 +1,9 @@
 """
 Discord Message Handler
 """
-
+from db.crud.executor import get_record
 from db.sql.connection.singleton import Database
+from db.sql.query.builder import Select
 
 
 async def handle(message):
@@ -29,7 +30,7 @@ async def handle(message):
                                    'Please check during a later sprint. ')
 
     if message.content.startswith('BELOW20'):
-        db = Database.instance(None)
+        _db = Database.instance(None)
         sel = Select("products", ["product_id"])
         sel.less_than_or_equal_to("wholesale_cost", 20.0)
         products = []
