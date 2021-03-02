@@ -13,7 +13,7 @@ class CSVSource:
     Intended to offer download and read support from a file
     """
 
-    def __init__(self, fpath, headers=None, batch_size=100):
+    def __init__(self, fpath, headers=None, has_headers=False, batch_size=100):
         """
         Constructor
 
@@ -26,6 +26,7 @@ class CSVSource:
         self._batch_size = batch_size
         self._fp = None
         self._headers = headers
+        self._has_headers = has_headers
         self._do_read = True
         self._reader = None
 
@@ -33,14 +34,21 @@ class CSVSource:
         """
         Closes file pointer
         """
-        self._fp.close()
+        if self._fp:
+            self._fp.close()
 
     def download(self):
         """
         Download the S3 target file or files. Used when stream is False
         """
-        self._fp = open(self._fpath, newline='\x0a')
-        self._reader = csv.DictReader(self._fp, fieldnames=self._headers)
+        self._fp = open(self._fpath, newline='\n')
+        if self._has_headers and self._headers:
+            try:
+                self._fp.__next__()
+            except Exception as e:
+                print("CSV May be Empty")
+                print(e)
+        self._reader = csv.DictReader(self._fp, fieldnames=self._headers,)
 
     def __iter__(self):
         """

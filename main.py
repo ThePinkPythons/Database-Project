@@ -24,9 +24,10 @@ Options:
 #import json
 
 #from docopt import docopt
-
+import os
 
 from bot import discordbot
+from db.io.manager import write_csv_to_sql
 from db.sql.connection.singleton import Database
 
 
@@ -40,6 +41,18 @@ def build_db(database, table, headers):
     :return: A prebuilt database object
     """
     Database.instance(database, table, headers)
+
+
+def upload_csv(headers, has_headers):
+    """
+    Upload the CSV file
+
+    :param headers: Any headers
+    :param has_headers: Whether there are headers in the csv
+    """
+    fpath = os.getcwd()
+    fpath = os.path.sep.join([fpath, "productdata", "product_data.csv"])
+    write_csv_to_sql(fpath, headers=headers, has_headers=has_headers)
 
 
 if __name__ == "__main__":
@@ -57,4 +70,5 @@ if __name__ == "__main__":
         "supplier_id": "varchar"
     }
     build_db(":memory:", "products", headers)
+    upload_csv(headers.keys(), has_headers=True)
     discordbot.start()
