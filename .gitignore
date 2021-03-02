@@ -2,3 +2,5 @@ code.txt
 .idea
 .project
 __pycache__
+data
+*.db
