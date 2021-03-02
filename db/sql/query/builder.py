@@ -244,7 +244,7 @@ class DropTable(BaseQuery):
 
     def __str__(self):
         """
-        Generates a create query
+        Generates a drop table statement
 
         :return:    The query
         """
