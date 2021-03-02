@@ -38,7 +38,6 @@ class MainTests(unittest.TestCase):
         finally:
             c.close()
 
-
     def test_upload_csv(self):
         """
         Test uploading the CSV file
