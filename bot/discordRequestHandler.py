@@ -7,6 +7,7 @@ from db.sql.query.builder import Select
 
 
 async def handle(message):
+
     if message.content.startswith('!CANCEL'):
         # Cancel function
         pass
@@ -36,6 +37,6 @@ async def handle(message):
         products = []
         for product in get_record(sel):
             products.append(product[0])
-        msg = "The products below $20 are: {}".format(str(products))
+        msg = "The products below $20 are: {}".format(str(products[:10]))
         await message.channel.send(msg)
 
