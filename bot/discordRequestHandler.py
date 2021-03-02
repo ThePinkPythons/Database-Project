@@ -1,3 +1,10 @@
+"""
+Discord Message Handler
+"""
+
+from db.sql.connection.singleton import Database
+
+
 async def handle(message):
     if message.content.startswith('!CANCEL'):
         # Cancel function
@@ -5,7 +12,7 @@ async def handle(message):
 
     if message.content.startswith("!STATUS"):
         # Status function
-        await message.channel.send("The status of this order is..."):
+        await message.channel.send("The status of this order is...")
 
     if message.content.startswith('!HELP'):
         await message.channel.send(
@@ -22,5 +29,13 @@ async def handle(message):
                                    'Please check during a later sprint. ')
 
     if message.content.startswith('BELOW20'):
-        await message.channel.send('The products below $20 are: ')
+        db = Database.instance(None)
+        sel = Select("products", ["product_id"])
+        sel.less_than_or_equal_to("wholesale_cost", 20.0)
+        products = []
+        for product in get_record(sel):
+            products.append(product[0])
+            products.append()
+        msg = "The products below $20 are: {}".format(str(products))
+        await message.channel.send(msg)
 
