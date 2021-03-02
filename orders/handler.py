@@ -9,7 +9,7 @@ from db.templates.dbobject import DatabaseObject
 
 
 # Table headers
-TABLE_HEADERS = {
+ORDER_TABLE_MAPPING = {
     "product_id": "varchar",
     "quantity": "integer",
     "email": "varchar",
@@ -47,8 +47,7 @@ class Order(DatabaseObject):
             "state": state,
             "zip": zip,
         }
-
-    @property.setter
+    
     def product_id(self, product_id):
         """
         Set the product id
@@ -56,8 +55,7 @@ class Order(DatabaseObject):
         :param product_id:  The product uuid
         """
         self._order["product_id"] = product_id
-
-    @property.setter
+    
     def quantity(self, quantity):
         """
         Set the quantity
@@ -89,12 +87,12 @@ class DeleteOrdersByUser(object):
         """
         Run the delete
         """
-        del_o = Delete("orders")
-        del_o.equals("email", self._email)
-        delete_record(del_o)
+        delete = Delete("orders")
+        delete.equals("email", self._email)
+        delete_record(delete)
 
 
-class DeleteOrdersByProductId(object):
+class DeleteOrders(object):
 
     def __init__(self, product_id):
         """
@@ -102,37 +100,33 @@ class DeleteOrdersByProductId(object):
 
         :param product_id:  Product Id to delete
         """
-        self._product_id = product_id
+        self.delete = Delete("orders")
+
+    def with_product_id(self, product_id):
+        """
+        Delete orders with the product ID
+
+        :param product_id:  The product id
+        """
+        self.delete.equals("product_id", product_id)
+
+    def by_user(self, email):
+        """
+        Delete orders with the given user
+
+        :param email:    The user email
+        """
+        self.delete.equals("email", email)
 
     def delete(self):
         """
         Run the delete
         """
-        del_o = Delete("orders")
-        del_o.equals("product_id", self._product_id)
-        delete_record(del_o)
+        delete_record(self.delete)
+        self.delete = Delete("orders")
 
 
-class DeleteOrdersByOrderId(object):
-
-    def __init__(self, order_id):
-        """
-        Constructor
-
-        :param order_id:  Delete the order
-        """
-        self._order_id = order_id
-
-    def delete(self):
-        """
-        Run the delete
-        """
-        del_o = Delete("orders")
-        del_o.equals("order_id", self._order_id)
-        delete_record(del_o)
-
-
-class GetOrdersByUser(object):
+class GetOrders(object):
 
     def __init__(self, email):
         """
@@ -140,45 +134,24 @@ class GetOrdersByUser(object):
 
         :param email:   Email user id to orders by
         """
-        self._email = email
-        self._product_id = None
-        self._fields = TABLE_HEADERS.keys()
+        self._fields = ORDER_TABLE_MAPPING.keys()
         self.select = Select("orders", self._fields)
         self.select.equals("email", email)
 
-    @property.setter
-    def product_id(self, product_id):
+    def by_user(self, email):
+        """
+        Get the user with the specific email
+
+        :param email:   The user email
+        """
+        self.select.equals("email", email)
+    
+    def with_product_id(self, product_id):
         """
         The product id
 
         :param product_id:  Product id
         """
-        self._product_id = product_id
-
-    def query(self):
-        """
-        Perform the queries. Reset the selector for reuse.
-
-        :return:    Dictionaries of objects
-        """
-        records = []
-        for row in get_record(self._sel):
-            record = dict(zip(self._fields, row))
-            records.append(record)
-        self.select = Select("orders", self._fields)
-        return records
-
-
-class GetOrdersByProductId(object):
-
-    def __init__(self, product_id):
-        """
-        Constructor
-
-        :param email:   Email user id to orders by
-        """
-        self._fields = TABLE_HEADERS.keys()
-        self._select = Select("orders", self._fields)
         self.select.equals("product_id", product_id)
 
     def query(self):
@@ -188,7 +161,8 @@ class GetOrdersByProductId(object):
         :return:    Dictionaries of objects
         """
         records = []
-        for row in get_record(self._sel):
+        # must use the for loop does not work otherwise
+        for row in get_record(self.select):
             record = dict(zip(self._fields, row))
             records.append(record)
         self.select = Select("orders", self._fields)
@@ -199,7 +173,7 @@ def create_order_table():
     """
     Creates an order table
     """
-    create = CreateTable("orders", TABLE_HEADERS)
+    create = CreateTable("orders", ORDER_TABLE_MAPPING)
     create_table(create)
 
 
