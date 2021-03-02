@@ -12,6 +12,8 @@ from db.templates.dbobject import DatabaseObject
 ORDER_TABLE_MAPPING = {
     "product_id": "varchar",
     "quantity": "integer",
+    "price": "double precision",
+    "total": "double_precision",
     "email": "varchar",
     "order_id": "varchar",
     "address": "varchar",
@@ -40,6 +42,7 @@ class Order(DatabaseObject):
         self._order = {
             "product_id": None,
             "quantity": None,
+            "price": None,
             "email": email,
             "order_id": str(uuid4()),
             "address": address,
@@ -64,13 +67,28 @@ class Order(DatabaseObject):
         """
         self._order["quantity"] = quantity
 
+    def price(self, price):
+        """
+        Set the sale price
+
+        :param price:   The price
+        """
+        self._order["price"] = price
+
     def save(self):
         """
         Save the order
+
+        :return: Unique order uuid
         """
+        if self._order.get("price", None) and self._order.get("quantity", None):
+            self._order["total"] = self._order["price"] * self._order["quantity"]
+        else:
+            raise ValueError("Price and Quantity not Set")
         create = Create("orders", self._order.keys())
         create_records(
             self._order.keys, create, [self._order])
+        return self._order["order_id"]
 
 
 class DeleteOrdersByUser(object):
@@ -94,11 +112,9 @@ class DeleteOrdersByUser(object):
 
 class DeleteOrders(object):
 
-    def __init__(self, product_id):
+    def __init__(self):
         """
         Constructor
-
-        :param product_id:  Product Id to delete
         """
         self.delete = Delete("orders")
 

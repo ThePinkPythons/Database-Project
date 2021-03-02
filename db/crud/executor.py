@@ -81,6 +81,20 @@ def create_table(query):
     c.close()
 
 
+def update_records(query):
+    """
+    Update the records
+
+    :param query:   Query to run
+    """
+    query = str(query)
+    db = Database.instance(query)
+    c = db.cursor()
+    c.execute(query)
+    db.commit()
+    c.close()
+
+
 def drop_table(query):
     """
     Drop a table in the database

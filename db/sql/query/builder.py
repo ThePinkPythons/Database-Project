@@ -128,6 +128,14 @@ class Update(BaseQuery):
         self._table = table
         self._mapping = mapping
 
+    def set_mapping(self, mapping):
+        """
+        Allows users to set the mapping later
+
+        :param mapping: The mapping of fields to values
+        """
+        self._mapping = mapping
+
     def __str__(self):
         """
         Gets the update query
