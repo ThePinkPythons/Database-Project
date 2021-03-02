@@ -36,8 +36,10 @@ class User(DatabaseObject):
         pass
 
 
-def get_users():
-    """
-    Get the users
-    """
-    pass
+class GetUser(object):
+
+    def __init__(self):
+        """
+        Constructor
+        """
+        pass

@@ -39,4 +39,3 @@ async def handle(message):
             products.append(product[0])
         msg = "The products below $20 are: {}".format(str(products[:10]))
         await message.channel.send(msg)
-
