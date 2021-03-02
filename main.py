@@ -21,11 +21,13 @@ Options:
   --headers=<headers>      Headers for the db file in the order they appear
   --db=<db>                Database to use
 """
-import json
+#import json
 
-from docopt import docopt
+#from docopt import docopt
 
-from db.sql import Database
+
+from bot import discordbot
+from db.sql.connection.singleton import Database
 
 
 def build_db(database, table, headers):
@@ -37,16 +39,22 @@ def build_db(database, table, headers):
     :param headers: Headers to use
     :return: A prebuilt database object
     """
-    db = Database.instance(database, table, headers)
-
-
+    Database.instance(database, table, headers)
 
 
 if __name__ == "__main__":
-    arguments = docopt(__doc__, version='Database Project 0.1')
-    database = arguments.get("--database", "project.db")
-    table = arguments.get("--table", "data")
-    headers = arguments.get("--headers", None)
-    if headers:
-        headers = json.loads(headers)
-    Database.instance(database, table, headers)
+    #arguments = docopt(__doc__, version='Database Project 0.1')
+    #database = arguments.get("--database", "project.db")
+    #table = arguments.get("--table", "data")
+    #headers = arguments.get("--headers", None)
+    #if headers:
+    #    headers = json.loads(headers)
+    headers = {
+        "product_id": "varchar",
+        "quantity": "integer",
+        "wholesale_price": "double precision",
+        "sale_price": "double precision",
+        "supplier_id": "varchar"
+    }
+    build_db(":memory:", "products", headers)
+    discordbot.start()
