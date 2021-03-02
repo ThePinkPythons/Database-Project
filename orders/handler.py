@@ -152,26 +152,15 @@ class GetOrdersByUser(object):
 
 class GetOrdersByProductId(object):
 
-    def __init__(self, email):
+    def __init__(self, product_id):
         """
         Constructor
 
         :param email:   Email user id to orders by
         """
-        self._email = email
-        self._product_id = None
         self._fields = TABLE_HEADERS.keys()
         self._select = Select("orders", self._fields)
-        self.select.equals("email", email)
-
-    @property.setter
-    def product_id(self, product_id):
-        """
-        The product id
-
-        :param product_id:  Product id
-        """
-        self._product_id = product_id
+        self.select.equals("product_id", product_id)
 
     def query(self):
         """
