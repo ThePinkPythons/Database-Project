@@ -32,7 +32,7 @@ from db.sql.connection.singleton import Database
 
 def build_db(database, table, headers):
     """
-    Build the data store
+    Build the productdata store
 
     :param database:    The database
     :param table:   Table to use
@@ -45,7 +45,7 @@ def build_db(database, table, headers):
 if __name__ == "__main__":
     #arguments = docopt(__doc__, version='Database Project 0.1')
     #database = arguments.get("--database", "project.db")
-    #table = arguments.get("--table", "data")
+    #table = arguments.get("--table", "productdata")
     #headers = arguments.get("--headers", None)
     #if headers:
     #    headers = json.loads(headers)

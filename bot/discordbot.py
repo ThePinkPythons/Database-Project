@@ -31,7 +31,7 @@ def get_code():
 # Dont upload the code.txt file!!!
 def get_code():
     fpath = os.getcwd()
-    fpath = os.path.sep.join([fpath, "bot", "data", "code.txt"])
+    fpath = os.path.sep.join([fpath, "bot", "productdata", "code.txt"])
     with open(fpath, 'r') as f:
         return f.readline()
 

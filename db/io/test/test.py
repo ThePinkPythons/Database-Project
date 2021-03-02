@@ -19,7 +19,7 @@ class TestCSV(unittest.TestCase):
             "b": "varchar"
         }
         fpath = os.getcwd()
-        fpath = os.path.sep.join([fpath, "data", "test_data.csv"])
+        fpath = os.path.sep.join([fpath, "productdata", "test_data.csv"])
         write_csv_to_sql(
             fpath,
             ":memory:",
@@ -43,7 +43,7 @@ class TestCSV(unittest.TestCase):
             "b": "varchar"
         }
         fpath = os.getcwd()
-        fpath = os.path.sep.join([fpath, "data", "test_data"])
+        fpath = os.path.sep.join([fpath, "productdata", "test_data"])
         write_csv_to_sql(
             fpath,
             ":memory:",
@@ -58,5 +58,5 @@ class TestCSV(unittest.TestCase):
             rvals.append(row)
         assert len(rvals) == 2
         fpath = os.getcwd()
-        fpath = os.path.sep.join([fpath, "data", "out_data.csv"])
+        fpath = os.path.sep.join([fpath, "productdata", "out_data.csv"])
         write_csv_from_sql(db, ["a", "b"], fpath, "test_table")
