@@ -1,10 +1,7 @@
 """
 CSV source io
 """
-import codecs
-import os
 
-import boto3
 import csv
 
 
