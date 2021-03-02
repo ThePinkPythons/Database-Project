@@ -13,6 +13,13 @@ def write_csv_to_sql(filepath, db=":memory:", table="products", headers=None, ha
     """
     Writes a given CSV to a table
 
+    Field mappings have the form
+     {
+        "product_id": "varchar",
+        "cost": "double",
+        "quantity": "integer"
+    }
+
     :param filepath:    The file path
     :param db:  The database object
     :param table:   Name of the table

@@ -87,7 +87,7 @@ def create_insert(table, keys):
     return query
 
 
-def get_create_statement(table, mapping):
+def get_create_table_statement(table, mapping):
     """
     Creates the sql table create statement
 

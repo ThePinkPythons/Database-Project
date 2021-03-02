@@ -10,8 +10,8 @@ def create_records(keys, query, batch):
     """
     Create a batch of records
 
-    :para db:   The databas
-    :param keys:    Keys to us
+    :para db:   The database
+    :param keys:    Keys to use
     :param query:   The query to use
     :param batch:   Batch to update
     """
@@ -59,6 +59,20 @@ def delete_record(query):
     Delete a record
 
     :param query:   The delete query
+    """
+    query = str(query)
+    db = Database.instance(None)
+    c = db.cursor()
+    c.execute(query)
+    db.commit()
+    c.close()
+
+
+def create_table(query):
+    """
+    Create a table in the database
+
+    :param query:   Query object to serialize
     """
     query = str(query)
     db = Database.instance(None)

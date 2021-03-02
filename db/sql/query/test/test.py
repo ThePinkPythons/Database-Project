@@ -4,7 +4,7 @@ Unittests for csv
 
 import unittest
 
-from db.sql.query.builder import Select, Create, Update, Delete
+from db.sql.query.builder import Select, Create, Update, Delete, CreateTable
 
 
 class QueryTests(unittest.TestCase):
@@ -28,3 +28,12 @@ class QueryTests(unittest.TestCase):
         ins = Create("test_table", ["a", "b"])
         q = str(ins)
         assert q == "INSERT INTO test_table (a,b) VALUES(?,?)"
+
+    def test_create_table(self):
+        mapping = {
+            "a": "varchar",
+            "b": "integer"
+        }
+        create = CreateTable("test_table_two", mapping)
+        query = str(create)
+        assert(query == "CREATE TABLE test_table_two (a varchar,b integer)")

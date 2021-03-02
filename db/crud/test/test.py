@@ -4,9 +4,9 @@ Test the executor
 
 import unittest
 
-from db.crud.executor import create_records, update_record, get_record, delete_record
+from db.crud.executor import create_records, update_record, get_record, delete_record, create_table
 from db.sql.connection.singleton import Database
-from db.sql.query.builder import Create, Update, Select, Delete
+from db.sql.query.builder import Create, Update, Select, Delete, CreateTable
 
 
 class ExecutorTests(unittest.TestCase):
@@ -58,7 +58,7 @@ class ExecutorTests(unittest.TestCase):
         mp = {
             "a": "integer"
         }
-        db = Database.instance(":memory:", "test_table", mp)
+        _db = Database.instance(":memory:", "test_table", mp)
         keys = mp.keys()
         create = Create("test_table", keys)
         create_records(keys, create, [{"a": 1}, {"a": 2}])
@@ -77,3 +77,12 @@ class ExecutorTests(unittest.TestCase):
         for r in get_record(sel):
             rvals.append(r)
         assert (len(rvals) == 1)
+
+    def test_create_table(self):
+        mapping = {
+            "a": "varchar",
+            "b": "integer"
+        }
+        _db = Database.instance(":memory:")
+        create = CreateTable("test_table_two", mapping)
+        create_table(create)

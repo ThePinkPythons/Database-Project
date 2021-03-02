@@ -1,7 +1,8 @@
 """
 A query using the decorator pattern
 """
-from db.sql.query.utilities import create_select, create_update_sql, delete_record, create_insert
+from db.sql.query.utilities import create_select, create_update_sql, delete_record, create_insert, \
+    get_create_table_statement
 
 
 class BaseQuery(object):
@@ -98,7 +99,7 @@ class Select(BaseQuery):
 
     def __str__(self):
         """
-        Stringify the query
+        Stringify the query. Returns a select statement
 
         :return:    Query string
         """
@@ -129,7 +130,7 @@ class Update(BaseQuery):
 
     def __str__(self):
         """
-        Creates a string
+        Gets the update query
 
         :return:    Query String
         """
@@ -156,7 +157,7 @@ class Delete(BaseQuery):
 
     def __str__(self):
         """
-        Delete query
+        Get the delete query
 
         :return:    The query string
         """
@@ -169,7 +170,7 @@ class Delete(BaseQuery):
 
 class Create(BaseQuery):
     """
-    Create query
+    Create record builder. The insert statement.
     """
 
     def __init__(self, table, keys):
@@ -190,3 +191,38 @@ class Create(BaseQuery):
         :return:    The query
         """
         return create_insert(self._table, self._keys)
+
+
+class CreateTable(BaseQuery):
+    """
+    Create table statement builder
+    """
+
+    def __init__(self, table, mapping):
+        """
+        Construtor for buildin a create table statement.
+
+        A table mapping is of th form
+
+        {
+            "columna": "integer",
+            "columnb": "varchar",
+            "columnc": "double"
+        }
+
+        Varchars are strings. All values are SQLite3 values
+
+        :param table:   The table to insert into
+        :param mapping: Table Mapping
+        """
+        super().__init__()
+        self._table = table
+        self._mapping = mapping
+
+    def __str__(self):
+        """
+        Generates a create query
+
+        :return:    The query
+        """
+        return get_create_table_statement(self._table, self._mapping)

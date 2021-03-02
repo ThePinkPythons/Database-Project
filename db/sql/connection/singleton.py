@@ -4,7 +4,7 @@ SQL Lite connector
 
 import sqlite3
 
-from db.sql.query.utilities import get_create_statement
+from db.sql.query.utilities import get_create_table_statement
 
 
 class Database(object):
@@ -34,7 +34,7 @@ class Database(object):
         """
         if cls._instance is None:
             cls._instance = sqlite3.connect(database, timeout=30)
-            sql = get_create_statement(table, mapping)
             if mapping and table:
+                sql = get_create_table_statement(table, mapping)
                 cls._instance.execute(sql)
         return cls._instance
