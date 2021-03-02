@@ -2,7 +2,7 @@
 A query using the decorator pattern
 """
 from db.sql.query.utilities import create_select, create_update_sql, delete_record, create_insert, \
-    get_create_table_statement
+    get_create_table_statement, get_drop_table_statement
 
 
 class BaseQuery(object):
@@ -226,3 +226,26 @@ class CreateTable(BaseQuery):
         :return:    The query
         """
         return get_create_table_statement(self._table, self._mapping)
+
+
+class DropTable(BaseQuery):
+    """
+    Drop the table
+    """
+
+    def __init__(self, table):
+        """
+        Constructor for drop table
+
+        :param table: The table to drop
+        """
+        super().__init__()
+        self._table = table
+
+    def __str__(self):
+        """
+        Generates a create query
+
+        :return:    The query
+        """
+        return get_drop_table_statement(self._table)

@@ -3,8 +3,8 @@ Order class
 """
 from uuid import uuid4
 
-from db.crud.executor import create_table, create_records, delete_record, get_record
-from db.sql.query.builder import CreateTable, Delete, Create, Select
+from db.crud.executor import create_table, create_records, delete_record, get_record, drop_table
+from db.sql.query.builder import CreateTable, Delete, Create, Select, DropTable
 from db.templates.dbobject import DatabaseObject
 
 
@@ -73,6 +73,25 @@ class Order(DatabaseObject):
         create = Create("orders", self._order.keys())
         create_records(
             self._order.keys, create, [self._order])
+
+
+class DeleteOrdersByUser(object):
+
+    def __init__(self, email):
+        """
+        Constructor
+
+        :param email:  Email uuid for the customer
+        """
+        self._email = email
+
+    def delete(self):
+        """
+        Run the delete
+        """
+        del_o = Delete("orders")
+        del_o.equals("email", self._email)
+        delete_record(del_o)
 
 
 class DeleteOrdersByProductId(object):
@@ -182,3 +201,11 @@ def create_order_table():
     """
     create = CreateTable("orders", TABLE_HEADERS)
     create_table(create)
+
+
+def drop_order_table():
+    """
+    Drop the order table
+    """
+    drop = DropTable("orders")
+    drop_table(drop)

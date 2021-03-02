@@ -1,7 +1,6 @@
 """
 Executes CRUD operations on the sqlite database.
 """
-import copy
 
 from db.sql.connection.singleton import Database
 
@@ -73,6 +72,20 @@ def create_table(query):
     Create a table in the database
 
     :param query:   Query object to serialize
+    """
+    query = str(query)
+    db = Database.instance(None)
+    c = db.cursor()
+    c.execute(query)
+    db.commit()
+    c.close()
+
+
+def drop_table(query):
+    """
+    Drop a table in the database
+
+    :param query:   Drop table query
     """
     query = str(query)
     db = Database.instance(None)
