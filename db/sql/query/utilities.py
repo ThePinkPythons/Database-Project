@@ -62,7 +62,7 @@ def create_update_sql(table, value_dict, where=None):
     return sql
 
 
-def delete_record(table, where):
+def delete_record_query(table, where):
     """
     Create a delete statement using the table and where clause.
     
