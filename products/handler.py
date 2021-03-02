@@ -43,10 +43,10 @@ class Product(DatabaseObject):
         """
         Save the product
         """
-        create = Create("orders", self._order.keys())
+        create = Create("products", self._order.keys())
         create_records(
             self._order.keys, create, [self._product])
-        return self._product["order_id"]
+        return self._product["product_id"]
 
 
 class UpdateProduct(object):
