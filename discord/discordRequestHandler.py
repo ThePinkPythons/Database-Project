@@ -14,7 +14,6 @@ MAX = 999999
 
 
 async def handle(message):
-
     if CURRENTUSERACTION is True:
         add_user_to_the_system(message)
         await message.channel.send("User has been created!")
@@ -32,10 +31,10 @@ async def handle(message):
 
     if message.content.startswith('!HELP'):
         await message.channel.send(
-            'To place an order type: new order'
-            '\nFor past orders type: orders'
-            '\nFor recommended products type: recommended'
-            '\nFor products that cost less than $20 type: below20'
+            'To place an order type: !new'
+            '\nFor past orders type: !orders'
+            '\nFor recommended products type: !recommended'
+            '\nFor products that cost less than $20 type: !below20'
             '\nTo cancel an order type: !cancel'
             '\nFor the status of an order type: !status')
 
@@ -47,7 +46,8 @@ async def handle(message):
             NEWORDER = True
             create_new_order(message)
         else:
-            await message.channel.send('You must have a user to create an order.\n To do this enter your email, address, city, state, and zip separated by spaces')
+            await message.channel.send(
+                'You must have a user to create an order.\n To do this enter your email, address, city, state, and zip separated by spaces')
             # wait for the user's next message
             CURRENTUSERACTION = True
 
@@ -72,7 +72,7 @@ async def handle(message):
 
 async def check_if_user_has_account(user_name):
     # Check the user db to see if message.author is already in the system if so return true.
-    query = create_select("users", "*", "user_name = "+user_name)
+    query = create_select("users", "*", "user_name = " + user_name)
     if get_record(query) is not None:
         return True
     return False
@@ -131,6 +131,8 @@ def create_order_line_items(data):
     # do we create table here to be able to put the records into?
     create_records(keys, create, data)
 
+
 def cancel_order(order_id):
-    query = delete_record_query("orders", "id = "+order_id)
+    query = delete_record_query("orders", "id = " + order_id)
     delete_record(query)
+
