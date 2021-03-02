@@ -32,11 +32,10 @@ async def handle(message):
     if message.content.startswith('BELOW20'):
         _db = Database.instance(None)
         sel = Select("products", ["product_id"])
-        sel.less_than_or_equal_to("wholesale_cost", 20.0)
+        sel.less_than_or_equal_to("sale_price", 20.0)
         products = []
         for product in get_record(sel):
             products.append(product[0])
-            products.append()
         msg = "The products below $20 are: {}".format(str(products))
         await message.channel.send(msg)
 
