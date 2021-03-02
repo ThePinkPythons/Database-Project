@@ -135,4 +135,3 @@ def create_order_line_items(data):
 def cancel_order(order_id):
     query = delete_record_query("orders", "id = " + order_id)
     delete_record(query)
-
