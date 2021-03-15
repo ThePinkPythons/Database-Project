@@ -92,8 +92,4 @@ async def handle(message):
                 '\n Example !BELOW20'
                 '\n this will return the first ten items below $20')
 
-    if message.content.startswith('!ACCOUNT'):
-        pass
 
-    if message.content.startswith('!NEW'):
-        pass
