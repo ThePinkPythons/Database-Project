@@ -61,7 +61,7 @@ async def handle(message):
             '\nTo create a new order type: new')
 
     if message.content.startswith('!ORDERS'):
-        await message.chnnel.send('This functionality currently does not exist. '
+        await message.channel.send('This functionality currently does not exist. '
                                   '\nPlease check during a later sprint. ')
 
     if message.content.startswith('!RECOMMENDED'):
