@@ -72,5 +72,4 @@ if __name__ == "__main__":
     build_db(":memory:", "products", headers)
     upload_csv(headers.keys(), has_headers=True)
     #Start the main user db
-    handler.start()
     discordbot.start()

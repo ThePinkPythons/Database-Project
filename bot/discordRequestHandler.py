@@ -7,6 +7,7 @@ from db.sql.query.builder import Select
 from db.sql.query.builder import CreateTable, Create, Select
 from db.sql.query.utilities import create_select, delete_record
 import user.handler
+import orders.handler
 from random import randint
 
 CURRENTUSERACTION = None
@@ -18,17 +19,19 @@ MAX = 999999
 
 async def check_if_user_has_account(user_name):
     # Check the user db to see if message.author is already in the system if so return true.
-    #TODO: Connect to dB.
-    query = create_select("users", "*", ("user_name = " , user_name))
-    if get_record(query) is not None:
-        return True
-    return False
-
+    handler.create_users_table()
+    #TODO: get user from the username 
+    handler.GetUsers().query(user_name)
 
 async def create_new_order(message):
     order_details = message.content.split(" ")
-    order_details.add(randint(MIN, MAX))
-    create_order_line_items(message)
+    order_details.pop(0)
+    #Order id
+    order_details.insert(0,randint(MIN, MAX))
+    order_details.append(message.author.name)
+    handler.create_users_table()
+    #TODO: get user info from user table to orders table.
+
 
 
 async def handle(message):
@@ -42,10 +45,9 @@ async def handle(message):
 
     if message.content.startswith('!NEW'):
         # New Order Function
-        if await check_if_user_has_account(message.author):
-            await message.channel.send('Please enter the product_id and quantity you would like, separated by spaces')
-            # wait for the user's next message
-            NEWORDER = True
+        if await check_if_user_has_account(message.author.name):
+
+            #await message.channel.send('Please enter the product_id and quantity you would like, separated by spaces')
             await create_new_order(message)
         else:
             await message.channel.send(

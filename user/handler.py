@@ -16,13 +16,6 @@ USER_TABLE_MAPPING = {
     "zip": "varchar"
 }
 
-def start():
-
-    fpath = os.getcwd()
-    fpath = os.path.sep.join([fpath,"productdata","account_data.csv"])
-    Database.instance("",'account_data',USER_TABLE_MAPPING)
-    write_csv_to_sql(fpath,headers=USER_TABLE_MAPPING,has_headers=True)
-
 
 class User(DatabaseObject):
 
