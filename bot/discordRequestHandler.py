@@ -6,8 +6,8 @@ from db.sql.connection.singleton import Database
 from db.sql.query.builder import Select
 from db.sql.query.builder import CreateTable, Create, Select
 from db.sql.query.utilities import create_select, delete_record
-import user.handler
-import orders.handler
+from user.handler import GetUsers, User
+from orders.handler import create_order_table, Order
 from random import randint
 
 CURRENTUSERACTION = None
@@ -18,30 +18,56 @@ MAX = 999999
 
 
 async def check_if_user_has_account(user_name):
-    # Check the user db to see if message.author is already in the system if so return true.
-    user = handler.GetUsers()
+    """Check if the user has an account if not return false."""
+    user = GetUsers()
     user.by_email(user_name)
     user = user.query()
     if len(user) > 0:
         return True
     else:
-        print("False")
         return False
 
-async def create_order_line_items(message):
-    pass
-
+async def create_order_line_items(user_name,message):
+    """Append new list to the orders table"""
+    user = GetUsers()
+    user.by_email(user_name)
+    user = user.query()
+    try:
+        user = list(user[0].keys())
+        print(message)
+        new_order = Order(user[0],user[1],user[2],user[3],user[4],message[1],message[2],message[4],message[3]).save()
+    except Exception as e:
+        print(e)
 
 async def create_new_order(message):
-    order_details = message.content.split(" ")
+    """Create new order and convert to list"""
+    order_details = message.content.split(",")
     order_details.append(randint(MIN, MAX))
-    create_order_line_items(message)
+    await create_order_line_items(message.author.name,order_details)
 
 
 async def handle(message):
+    """Handler user message"""
+    if message.content.startswith('!ADD'):
+        new_account = message.content.replace("!ADD", "").split(",")
+        new_account.pop(0)
+        new_account.insert(0,message.author.name)
+        try:
+            User(new_account[0],new_account[1],new_account[2],new_account[3],new_account[4]).save()
+            await message.channel.send("The account has been created!")
+        except Exception as e:
+            print(e)
+            await message.channel.send(
+            'The account could not be created make sure all details is provided.'
+            '\n !ADD,address,city,state,zip'
+            )
+
+
     if message.content.startswith('!CANCEL'):
-        # Cancel function
-        pass
+        user = GetUsers()
+        user.by_email(message.author.name)
+        user = user.query()
+        await message.channel.send("There are no orders to cancel for user | " + message.author.name)
 
     if message.content.startswith("!STATUS"):
         # Status function
@@ -56,7 +82,7 @@ async def handle(message):
         else:
             await message.channel.send(
                 'You must have a user to create an order.'
-                '\n To do this enter your email, address, city, state, and zip separated by spaces')
+                '\n To do this enter your address, city, state, and zip separated by spaces')
             # wait for the user's next message
             CURRENTUSERACTION = True
 
