@@ -4,3 +4,4 @@ code.txt
 __pycache__
 productdata
 *.db
+venv
