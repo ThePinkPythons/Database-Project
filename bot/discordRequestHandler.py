@@ -19,19 +19,16 @@ MAX = 999999
 
 async def check_if_user_has_account(user_name):
     # Check the user db to see if message.author is already in the system if so return true.
-    handler.create_users_table()
-    #TODO: get user from the username 
-    handler.GetUsers().query(user_name)
+    query = create_select("users", "*", "user_name = {}".format(user_name))
+    if get_record(query) is not None:
+        return True
+    return False
+
 
 async def create_new_order(message):
     order_details = message.content.split(" ")
-    order_details.pop(0)
-    #Order id
-    order_details.insert(0,randint(MIN, MAX))
-    order_details.append(message.author.name)
-    handler.create_users_table()
-    #TODO: get user info from user table to orders table.
-
+    order_details.append(randint(MIN, MAX))
+    create_order_line_items(message)
 
 
 async def handle(message):
@@ -65,7 +62,7 @@ async def handle(message):
             '\nTo create a new order type: new')
 
     if message.content.startswith('!ORDERS'):
-        await message.chnnel.send('This functionality currently does not exist. '
+        await message.channel.send('This functionality currently does not exist. '
                                   '\nPlease check during a later sprint. ')
 
     if message.content.startswith('!RECOMMENDED'):
