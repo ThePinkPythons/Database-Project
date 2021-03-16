@@ -19,10 +19,17 @@ MAX = 999999
 
 async def check_if_user_has_account(user_name):
     # Check the user db to see if message.author is already in the system if so return true.
-    query = create_select("users", "*", "user_name = {}".format(user_name))
-    if get_record(query) is not None:
+    user = handler.GetUsers()
+    user.by_email(user_name)
+    user = user.query()
+    if len(user) > 0:
         return True
-    return False
+    else:
+        print("False")
+        return False
+
+async def create_order_line_items(message):
+    pass
 
 
 async def create_new_order(message):
