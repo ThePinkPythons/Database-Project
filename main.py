@@ -29,7 +29,7 @@ import os
 from bot import discordbot
 from db.io.manager import write_csv_to_sql
 from db.sql.connection.singleton import Database
-
+from user import handler
 
 def build_db(database, table, headers):
     """
@@ -71,4 +71,6 @@ if __name__ == "__main__":
     }
     build_db(":memory:", "products", headers)
     upload_csv(headers.keys(), has_headers=True)
+    #Start the main user db
+    handler.start()
     discordbot.start()

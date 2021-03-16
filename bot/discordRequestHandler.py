@@ -6,6 +6,7 @@ from db.sql.connection.singleton import Database
 from db.sql.query.builder import Select
 from db.sql.query.builder import CreateTable, Create, Select
 from db.sql.query.utilities import create_select, delete_record
+import user.handler
 from random import randint
 
 CURRENTUSERACTION = None
@@ -17,7 +18,8 @@ MAX = 999999
 
 async def check_if_user_has_account(user_name):
     # Check the user db to see if message.author is already in the system if so return true.
-    query = create_select("users", "*", "user_name = " + user_name)
+    #TODO: Connect to dB.
+    query = create_select("users", "*", ("user_name = " , user_name))
     if get_record(query) is not None:
         return True
     return False
@@ -91,5 +93,3 @@ async def handle(message):
                 'Please type a integer after !BELOW'
                 '\n Example !BELOW20'
                 '\n this will return the first ten items below $20')
-
-

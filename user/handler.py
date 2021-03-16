@@ -4,7 +4,9 @@ User table handler. The UUID for a User is the email. User is not reusable.
 from db.crud.executor import create_records, get_record, delete_record, create_table
 from db.sql.query.builder import Create, Select, Delete, CreateTable
 from db.templates.dbobject import DatabaseObject
-
+from db.io.manager import write_csv_to_sql
+from db.sql.connection.singleton import Database
+import os
 
 USER_TABLE_MAPPING = {
     "email": "varchar",
@@ -13,6 +15,13 @@ USER_TABLE_MAPPING = {
     "state": "varchar",
     "zip": "varchar"
 }
+
+def start():
+
+    fpath = os.getcwd()
+    fpath = os.path.sep.join([fpath,"productdata","account_data.csv"])
+    Database.instance("",'account_data',USER_TABLE_MAPPING)
+    write_csv_to_sql(fpath,headers=USER_TABLE_MAPPING,has_headers=True)
 
 
 class User(DatabaseObject):
