@@ -18,6 +18,7 @@ async def on_message(message):
     if message.author == client.user:
         return
     else:
+        message.content = message.content.upper()
         await discordRequestHandler.handle(message)
 
 

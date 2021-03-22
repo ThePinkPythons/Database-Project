@@ -26,7 +26,7 @@ Options:
 #from docopt import docopt
 import os
 
-from bot import discordbot
+from bot import discordBot
 from db.io.manager import write_csv_to_sql
 from db.sql.connection.singleton import Database
 from orders.handler import create_order_table
@@ -75,4 +75,4 @@ if __name__ == "__main__":
     create_order_table()
     create_users_table()
     upload_csv(headers.keys(), has_headers=True)
-    discordbot.start()
+    discordBot.start()

@@ -7,26 +7,12 @@ from db.sql.query.builder import Select
 from db.sql.query.builder import CreateTable, Create, Select
 from db.sql.query.utilities import create_select, delete_record
 from random import randint
+from bot.orderHandler import check_if_user_has_account,create_new_order
+
 
 CURRENTUSERACTION = None
 NEWORDER = None
 CANCELLING = None
-MIN = 1
-MAX = 999999
-
-
-async def check_if_user_has_account(user_name):
-    # Check the user db to see if message.author is already in the system if so return true.
-    query = create_select("users", "*", "user_name = {}".format(user_name))
-    if get_record(query) is not None:
-        return True
-    return False
-
-
-async def create_new_order(message):
-    order_details = message.content.split(" ")
-    order_details.append(randint(MIN, MAX))
-    create_order_line_items(message)
 
 
 async def handle(message):
@@ -40,11 +26,11 @@ async def handle(message):
 
     if message.content.startswith('!NEW'):
         # New Order Function
-        if await check_if_user_has_account(message.author):
+        if await orderHandler.check_if_user_has_account(message.author):
             await message.author.send('Please enter the product_id and quantity you would like, separated by spaces')
             # wait for the user's next message
             NEWORDER = True
-            await create_new_order(message)
+            await orderHandler.create_new_order(message)
         else:
             await message.author.send(
                 'You must have a user to create an order.'
@@ -83,8 +69,11 @@ async def handle(message):
             products = []
             for product in get_record(sel):
                 products.append(product[0])
-            msg = "The products below ", below, " are: {}".format(str(products[:10]))
-            await message.author.send(msg)
+            if products:
+                msg = "The products below ", below, " are: {}".format(str(products[:10]))
+                await message.author.send(msg)
+            else:
+                await message.author.send("Server side error. Try again later.")
         else:
             # Simple help response if the user inputs something other than a digit.
             await message.author.send(
