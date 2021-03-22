@@ -36,24 +36,24 @@ async def handle(message):
 
     if message.content.startswith("!STATUS"):
         # Status function
-        await message.channel.send("The status of this order is...")
+        await message.author.send("The status of this order is...")
 
     if message.content.startswith('!NEW'):
         # New Order Function
         if await check_if_user_has_account(message.author):
-            await message.channel.send('Please enter the product_id and quantity you would like, separated by spaces')
+            await message.author.send('Please enter the product_id and quantity you would like, separated by spaces')
             # wait for the user's next message
             NEWORDER = True
             await create_new_order(message)
         else:
-            await message.channel.send(
+            await message.author.send(
                 'You must have a user to create an order.'
                 '\n To do this enter your email, address, city, state, and zip separated by spaces')
             # wait for the user's next message
             CURRENTUSERACTION = True
 
     if message.content.startswith('!HELP'):
-        await message.channel.send(
+        await message.author.send(
             'To create an account type: account'
             '\nFor past orders type: orders'
             '\nFor recommended products type: recommended'
@@ -61,11 +61,11 @@ async def handle(message):
             '\nTo create a new order type: new')
 
     if message.content.startswith('!ORDERS'):
-        await message.channel.send('This functionality currently does not exist. '
+        await message.author.send('This functionality currently does not exist. '
                                   '\nPlease check during a later sprint. ')
 
     if message.content.startswith('!RECOMMENDED'):
-        await message.channel.send('This functionality currently does not exist. '
+        await message.author.send('This functionality currently does not exist. '
                                    '\nPlease check during a later sprint. ')
 
     if message.content.startswith('!BELOW'):
@@ -84,12 +84,10 @@ async def handle(message):
             for product in get_record(sel):
                 products.append(product[0])
             msg = "The products below ", below, " are: {}".format(str(products[:10]))
-            await message.channel.send(msg)
+            await message.author.send(msg)
         else:
             # Simple help response if the user inputs something other than a digit.
-            await message.channel.send(
+            await message.author.send(
                 'Please type a integer after !BELOW'
                 '\n Example !BELOW20'
                 '\n this will return the first ten items below $20')
-
-

@@ -17,7 +17,8 @@ async def on_message(message):
     # Check if the user who sent the message is this bot.
     if message.author == client.user:
         return
-    await discordRequestHandler.handle(message)
+    else:
+        await discordRequestHandler.handle(message)
 
 
 # I dont want to store a secret api key on bot
