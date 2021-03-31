@@ -1,14 +1,10 @@
 """
 Discord Message Handler
 """
+from bot import orderHandler
 from db.crud.executor import get_record
 from db.sql.connection.singleton import Database
 from db.sql.query.builder import Select
-from db.sql.query.builder import CreateTable, Create, Select
-from db.sql.query.utilities import create_select, delete_record
-from random import randint
-from bot.orderHandler import check_if_user_has_account,create_new_order
-
 
 CURRENTUSERACTION = None
 NEWORDER = None
