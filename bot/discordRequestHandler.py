@@ -5,6 +5,7 @@ from bot import orderHandler
 from db.crud.executor import get_record
 from db.sql.connection.singleton import Database
 from db.sql.query.builder import Select
+from db.sql.query.utilities import create_select
 
 CURRENTUSERACTION = None
 NEWORDER = None
@@ -47,14 +48,18 @@ async def handle(message):
                                   '\nPlease check during a later sprint. ')
 
     if message.content.startswith('!RECOMMENDED'):
-        await message.author.send('This functionality currently does not exist. '
-                                  '\nPlease check during a later sprint. ')
-
-        if ...:
+        """This function currently checks to see if the user has previous orders. If they do not it returns a list of
+           five items by their product Id.
+        """
+        users_orders = create_select("orders", ["*"], "user_name = {}".format(message.author.name))
+        list_orders = get_record(users_orders)
+        if list_orders.size == 0:
             _db = Database.instance(None)
             sel = Select("products", ["product_id"], None, None, 5)
-
-
+            products = get_record(sel)
+            if products:
+                msg = "I would like to recommend {}".format(str(products))
+                await message.author.send(msg)
 
     if message.content.startswith('!BELOW'):
         """This function should now be able to handle more than just $20.
