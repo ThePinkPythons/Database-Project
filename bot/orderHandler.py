@@ -6,6 +6,9 @@ from db.sql.query.utilities import create_select
 order_id_min = 1
 order_id_max = 999999
 
+def create_order_line_items(message):
+    pass
+
 
 async def check_if_user_has_account(user_name):
     """ Function to  Check the user db to see if message.author is already in the system if so return true. """
@@ -14,9 +17,6 @@ async def check_if_user_has_account(user_name):
         return True
     return False
 
-
-def create_order_line_items(message):
-    pass
 
 
 async def create_new_order(message):

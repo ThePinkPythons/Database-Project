@@ -26,7 +26,7 @@ class BaseQuery(object):
 
     def less_than(self, field, value):
         """
-        Add a greater than codition to the query
+        Add a greater than condition to the query
 
         :param field:   The file
         :param value:   Value to be greater than
@@ -88,7 +88,7 @@ class Select(BaseQuery):
         :param fields:  Fields list
         :param group:   Group by clause
         :param order:   Order clause
-        :param limit:   Maximum number of records to reurn
+        :param limit:   Maximum number of records to return
         """
         super().__init__()
         self._table = table

@@ -48,7 +48,13 @@ async def handle(message):
 
     if message.content.startswith('!RECOMMENDED'):
         await message.author.send('This functionality currently does not exist. '
-                                   '\nPlease check during a later sprint. ')
+                                  '\nPlease check during a later sprint. ')
+
+        if ...:
+            _db = Database.instance(None)
+            sel = Select("products", ["product_id"], None, None, 5)
+
+
 
     if message.content.startswith('!BELOW'):
         """This function should now be able to handle more than just $20.
