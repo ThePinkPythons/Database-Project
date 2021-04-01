@@ -1,11 +1,15 @@
 """
 Discord Message Handler
 """
+from random import randint
+
 from bot import orderHandler
 from db.crud.executor import get_record
 from db.sql.connection.singleton import Database
 from db.sql.query.builder import Select
 from db.sql.query.utilities import create_select
+from orders.handler import Order
+from user.handler import User, GetUsers
 
 CURRENTUSERACTION = None
 NEWORDER = None
@@ -24,7 +28,8 @@ async def check_if_user_has_account(user_name):
     else:
         return False
 
-async def create_order_line_items(user_name,message):
+
+async def create_order_line_items(user_name, message):
     """Append new list to the orders table"""
     user = GetUsers()
     user.by_email(user_name)
@@ -32,15 +37,17 @@ async def create_order_line_items(user_name,message):
     try:
         user = list(user[0].keys())
         print(message)
-        new_order = Order(user[0],user[1],user[2],user[3],user[4],message[1],message[2],message[4],message[3]).save()
+        new_order = Order(user[0], user[1], user[2], user[3], user[4], message[1], message[2], message[4],
+                          message[3]).save()
     except Exception as e:
         print(e)
+
 
 async def create_new_order(message):
     """Create new order and convert to list"""
     order_details = message.content.split(",")
     order_details.append(randint(MIN, MAX))
-    await create_order_line_items(message.author.name,order_details)
+    await create_order_line_items(message.author.name, order_details)
 
 
 async def handle(message):
@@ -48,17 +55,16 @@ async def handle(message):
     if message.content.startswith('!ADD'):
         new_account = message.content.replace("!ADD", "").split(",")
         new_account.pop(0)
-        new_account.insert(0,message.author.name)
+        new_account.insert(0, message.author.name)
         try:
-            User(new_account[0],new_account[1],new_account[2],new_account[3],new_account[4]).save()
+            User(new_account[0], new_account[1], new_account[2], new_account[3], new_account[4]).save()
             await message.channel.send("The account has been created!")
         except Exception as e:
             print(e)
             await message.channel.send(
-            'The account could not be created make sure all details is provided.'
-            '\n !ADD,address,city,state,zip'
+                'The account could not be created make sure all details is provided.'
+                '\n !ADD,address,city,state,zip'
             )
-
 
     if message.content.startswith('!CANCEL'):
         user = GetUsers()
@@ -73,8 +79,7 @@ async def handle(message):
     if message.content.startswith('!NEW'):
         # New Order Function
         if await check_if_user_has_account(message.author.name):
-
-            #await message.channel.send('Please enter the product_id and quantity you would like, separated by spaces')
+            # await message.channel.send('Please enter the product_id and quantity you would like, separated by spaces')
             await create_new_order(message)
         if await orderHandler.check_if_user_has_account(message.author):
             await message.author.send('Please enter the product_id and quantity you would like, separated by spaces')
@@ -140,5 +145,3 @@ async def handle(message):
                 'Please type a integer after !BELOW'
                 '\n Example !BELOW20'
                 '\n this will return the first ten items below $20')
-
-
