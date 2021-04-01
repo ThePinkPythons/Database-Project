@@ -26,7 +26,7 @@ Options:
 #from docopt import docopt
 import os
 
-from bot import discordBot
+from bot import discordbot
 from db.io.manager import write_csv_to_sql
 from db.sql.connection.singleton import Database
 from orders.handler import create_order_table
@@ -43,6 +43,7 @@ def build_db(database, table, headers):
     :return: A prebuilt database object
     """
     Database.instance(database, table, headers)
+
 
 
 def upload_csv(headers, has_headers):
@@ -72,7 +73,9 @@ if __name__ == "__main__":
         "supplier_id": "varchar"
     }
     build_db(":memory:", "products", headers)
+
     create_order_table()
     create_users_table()
+    discordbot.start()
     upload_csv(headers.keys(), has_headers=True)
-    discordBot.start()
+
