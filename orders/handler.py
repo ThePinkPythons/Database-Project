@@ -29,7 +29,7 @@ class Order(DatabaseObject):
     setting new product ids repeatedly.
     """
 
-    def __init__(self, email, address, city, state, zip,product_id,quantity,price,order_id):
+    def __init__(self, email, address, city, state, zip, product_id, quantity, price, order_id):
         """
         Constructor
 
