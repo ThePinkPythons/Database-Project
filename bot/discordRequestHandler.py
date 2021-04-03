@@ -111,13 +111,16 @@ async def handle(message):
         """
         users_orders = create_select("orders", ["*"], "user_name = {}".format(message.author.name))
         list_orders = get_record(users_orders)
-        if list_orders.size == 0:
-            _db = Database.instance(None)
-            sel = Select("products", ["product_id"], None, None, 5)
-            products = get_record(sel)
-            if products:
-                msg = "I would like to recommend {}".format(str(products))
-                await message.author.send(msg)
+        
+        _db = Database.instance(None)
+        sel = Select("products", ["product_id"], None, None, 5)
+        products = []
+        #for product in get_record(sel):
+            #products.append(product[0])
+        print(products)
+        if products:
+            msg = "I would like to recommend {}".format(str(products))
+            await message.author.send(msg)
 
     if message.content.startswith('!BELOW'):
         """This function should now be able to handle more than just $20.
@@ -134,6 +137,7 @@ async def handle(message):
             products = []
             for product in get_record(sel):
                 products.append(product[0])
+            print(products)
             if products:
                 msg = "The products below ", below, " are: {}".format(str(products[:10]))
                 await message.author.send(msg)
