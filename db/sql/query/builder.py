@@ -26,7 +26,7 @@ class BaseQuery(object):
 
     def less_than(self, field, value):
         """
-        Add a greater than condition to the query
+        Add a greater than codition to the query
 
         :param field:   The file
         :param value:   Value to be greater than
@@ -146,7 +146,7 @@ class Update(BaseQuery):
             where = " AND ".join(self._conditions)
         else:
             where = None
-        return create_update_sql(self._table, self._mapping, where)  
+        return create_update_sql(self._table, self._mapping, where)
 
 
 class Delete(BaseQuery):

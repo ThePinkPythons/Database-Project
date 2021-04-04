@@ -29,7 +29,7 @@ class Order(DatabaseObject):
     setting new product ids repeatedly.
     """
 
-    def __init__(self, email, address, city, state, zip, product_id, quantity, price, order_id):
+    def __init__(self, email, address, city, state, zip):
         """
         Constructor
 
@@ -50,7 +50,7 @@ class Order(DatabaseObject):
             "state": state,
             "zip": zip,
         }
-
+    
     def product_id(self, product_id):
         """
         Set the product id
@@ -58,7 +58,7 @@ class Order(DatabaseObject):
         :param product_id:  The product uuid
         """
         self._order["product_id"] = product_id
-
+    
     def quantity(self, quantity):
         """
         Set the quantity
@@ -161,7 +161,7 @@ class GetOrders(object):
         :param email:   The user email
         """
         self.select.equals("email", email)
-
+    
     def with_product_id(self, product_id):
         """
         The product id

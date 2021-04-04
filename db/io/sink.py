@@ -4,7 +4,6 @@ CSV Sink
 
 import csv
 
-
 class CSVSink(object):
 
     def __init__(self, fpath, headers):

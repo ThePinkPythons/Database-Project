@@ -4,9 +4,7 @@ User table handler. The UUID for a User is the email. User is not reusable.
 from db.crud.executor import create_records, get_record, delete_record, create_table
 from db.sql.query.builder import Create, Select, Delete, CreateTable
 from db.templates.dbobject import DatabaseObject
-from db.io.manager import write_csv_to_sql
-from db.sql.connection.singleton import Database
-import os
+
 
 USER_TABLE_MAPPING = {
     "email": "varchar",
