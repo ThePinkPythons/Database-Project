@@ -35,7 +35,13 @@ async def recommend(message):
     #Select from products dB using params Group,Order,Limit
     sel = Select("products", ["product_id"], None, None, 5)
     products = []
-
+    ##TODO:
+    """
+        If statement checks if the user has ordered anything before the recommend
+        five items. If not recommend five random items from product list. 
+    """
+    for product in get_record(sel):
+        products.append(product[0])
     if products:
         msg = "I would like to recommend {}".format(str(products))
         await message.author.send(msg)

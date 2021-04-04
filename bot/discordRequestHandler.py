@@ -15,6 +15,8 @@ CURRENTUSERACTION = None
 NEWORDER = None
 CANCELLING = None
 
+##TODO: Split file into other files.
+
 
 async def handle(message):
     """Handler user message"""
@@ -68,18 +70,13 @@ async def handle(message):
             '\nTo create a new order type: new')
 
     if message.content.startswith('!ORDERS'):
-        await message.author.send('This functionality currently does not exist. '
-                                  '\nPlease check during a later sprint. ')
-        users_orders = create_select("orders", ["*"], "user_name = {}".format(message.author.name))
-        list_orders = get_record(users_orders)
-        msg = "Your past orders were {}".format(str(list_orders))
-        await message.author.send(msg)
+        orderHandler.order(message)
 
     if message.content.startswith('!RECOMMENDED'):
         """This function currently checks to see if the user has previous orders.
            If they do not it returns a list of five items by their product Id.
         """
-        recommend.recommend(message)
+        await recommend.recommend(message)
 
     if message.content.startswith('!BELOW'):
         """This function should now be able to handle more than just $20.

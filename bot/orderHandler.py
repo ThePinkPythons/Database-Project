@@ -4,6 +4,7 @@ from db.crud.executor import get_record
 from db.sql.query.utilities import create_select
 from orders.handler import Order
 from user.handler import GetUsers
+from products.handler import GetProduct
 
 MIN = 1
 MAX = 999999
@@ -33,6 +34,10 @@ async def create_order_line_items(user_name, message):
     except Exception as e:
         print(e)
 
+async def order(message):
+    products = GetProduct()
+    #Create for loop for getting all products
+    product.by
 
 async def create_new_order(message):
     """Create new order and convert to list"""
