@@ -1,53 +1,18 @@
 """
 Discord Message Handler
 """
-from random import randint
 
 from bot import orderHandler
+from bot.orderHandler import check_if_user_has_account, create_new_order
 from db.crud.executor import get_record
 from db.sql.connection.singleton import Database
 from db.sql.query.builder import Select
 from db.sql.query.utilities import create_select
-from orders.handler import Order
 from user.handler import User, GetUsers
 
 CURRENTUSERACTION = None
 NEWORDER = None
 CANCELLING = None
-MIN = 1
-MAX = 999999
-
-
-async def check_if_user_has_account(user_name):
-    """Check if the user has an account if not return false."""
-    user = GetUsers()
-    user.by_email(user_name)
-    user = user.query()
-    if len(user) > 0:
-        return True
-    else:
-        return False
-
-
-async def create_order_line_items(user_name, message):
-    """Append new list to the orders table"""
-    user = GetUsers()
-    user.by_email(user_name)
-    user = user.query()
-    try:
-        user = list(user[0].keys())
-        print(message)
-        new_order = Order(user[0], user[1], user[2], user[3], user[4], message[1], message[2], message[4],
-                          message[3]).save()
-    except Exception as e:
-        print(e)
-
-
-async def create_new_order(message):
-    """Create new order and convert to list"""
-    order_details = message.content.split(",")
-    order_details.append(randint(MIN, MAX))
-    await create_order_line_items(message.author.name, order_details)
 
 
 async def handle(message):
@@ -104,28 +69,30 @@ async def handle(message):
     if message.content.startswith('!ORDERS'):
         await message.author.send('This functionality currently does not exist. '
                                   '\nPlease check during a later sprint. ')
-
-    if message.content.startswith('!RECOMMENDED'):
-        """This function currently checks to see if the user has previous orders. If they do not it returns a list of
-           five items by their product Id.
-        """
         users_orders = create_select("orders", ["*"], "user_name = {}".format(message.author.name))
         list_orders = get_record(users_orders)
-        
+        msg = "Your past orders were {}".format(str(list_orders))
+        await message.author.send(msg)
+
+    if message.content.startswith('!RECOMMENDED'):
+        """This function currently checks to see if the user has previous orders. 
+           If they do not it returns a list of five items by their product Id.
+        """
+
         _db = Database.instance(None)
         sel = Select("products", ["product_id"], None, None, 5)
         products = []
-        #for product in get_record(sel):
-            #products.append(product[0])
-        print(products)
+
         if products:
             msg = "I would like to recommend {}".format(str(products))
             await message.author.send(msg)
+        else:
+            await message.author.send("Server side error. Try again later.")
 
     if message.content.startswith('!BELOW'):
         """This function should now be able to handle more than just $20.
-            This function searches the product dB and displays the first
-            ten values under the price input by the user.
+           This function searches the product dB and displays the first
+           ten values under the price input by the user.
         """
         # Substring the user's input to get the integer value.
         below = message.content[6:]
