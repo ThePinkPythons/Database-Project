@@ -1,6 +1,8 @@
 from db.crud.executor import get_record
 from db.sql.connection.singleton import Database
 from db.sql.query.builder import Select
+import random
+import csv
 
 
 async def below(message):
@@ -29,17 +31,30 @@ async def below(message):
 
 
 async def recommend(message):
-    _db = Database.instance(None)
-    # Select from products dB using params Group,Order,Limit
-    sel = Select("products", ["product_id"], None, None, 5)
     products = []
+    with open("product_data.csv") as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            products.append(row)
+
+    db_length = len(products)
+
+    rand_prodid = random.randint(0, db_length-1)
+
+    chosen_prodid = products[rand_prodid][1]
+    print(chosen_prodid)
+
+    #_db = Database.instance(None)
+    # Select from products dB using params Group,Order,Limit
+    #sel = Select("products", ["product_id"], None, None, 5)
+    #products = []
     # TODO:
     """
         If statement checks if the user has ordered anything before the recommend
         five items. If not recommend five random items from product list. 
     """
-    for product in get_record(sel):
-        products.append(product[0])
+    #for product in get_record(sel):
+    #    products.append(product[0])
     if products:
         msg = "I would like to recommend {}".format(str(products))
         await message.author.send(msg)
