@@ -32,7 +32,8 @@ async def handle(message):
             )
 
     if message.content.startswith('!CANCEL'):
-        orderHandler.cancel(message)
+
+        await orderHandler.cancel(message)
 
     if message.content.startswith("!STATUS"):
         # Status function
@@ -66,7 +67,8 @@ async def handle(message):
             '\nTo get the status of an order type: status')
 
     if message.content.startswith('!ORDERS'):
-        orderHandler.order(message)
+
+        await orderHandler.order(message)
 
     if message.content.startswith('!RECOMMENDED'):
         """This function currently checks to see if the user has previous orders.
