@@ -31,17 +31,20 @@ async def below(message):
 
 
 async def recommend(message):
+    randprods = []
     products = []
-    with open("product_data.csv") as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            products.append(row)
+    while len(products) != 5:
+        with open("product_data.csv") as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                randprods.append(row)
 
-    db_length = len(products)
+    db_length = len(randprods)
 
     rand_prodid = random.randint(0, db_length - 1)
 
-    chosen_prodid = products[rand_prodid][0]
+    chosen_prodid = randprods[rand_prodid][0]
+    products.append(chosen_prodid)
     print(chosen_prodid)
 
     # _db = Database.instance(None)
@@ -55,10 +58,9 @@ async def recommend(message):
     """
     # for product in get_record(sel):
     #    products.append(product[0])
-    """
+
     if products:
         msg = "I would like to recommend {}".format(str(products))
         await message.author.send(msg)
     else:
         await message.author.send("Server side error. Try again later.")
-    """
