@@ -34,10 +34,10 @@ async def recommend(message):
     sel = Select("products", ["product_id"], None, None, 5)
     products = []
     # TODO:
-    """
-        If statement checks if the user has ordered anything before the recommend
-        five items. If not recommend five random items from product list. 
-    """
+
+    # If statement checks if the user has ordered anything before the recommend
+    # five items. If not recommend five random items from product list.
+
     for product in get_record(sel):
         products.append(product[0])
     if products:
