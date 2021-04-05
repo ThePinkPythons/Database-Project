@@ -31,21 +31,20 @@ async def below(message):
 
 
 async def recommend(message):
-    randprods = []
+    rand_prods = []
     products = []
+    with open("product_data.csv") as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            rand_prods.append(row)
+
+    db_length = len(rand_prods)
     while len(products) != 5:
-        with open("product_data.csv") as csvfile:
-            reader = csv.reader(csvfile)
-            for row in reader:
-                randprods.append(row)
-
-    db_length = len(randprods)
-
-    rand_prodid = random.randint(0, db_length - 1)
-
-    chosen_prodid = randprods[rand_prodid][0]
-    products.append(chosen_prodid)
-    print(chosen_prodid)
+        rand_prodid = random.randint(0, db_length - 1)
+    
+        chosen_prodid = rand_prods[rand_prodid][0]
+        products.append(chosen_prodid)
+        print(chosen_prodid)
 
     # _db = Database.instance(None)
     # Select from products dB using params Group,Order,Limit
