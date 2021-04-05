@@ -39,24 +39,26 @@ async def recommend(message):
 
     db_length = len(products)
 
-    rand_prodid = random.randint(0, db_length-1)
+    rand_prodid = random.randint(0, db_length - 1)
 
-    chosen_prodid = products[rand_prodid][1]
+    chosen_prodid = products[rand_prodid][0]
     print(chosen_prodid)
 
-    #_db = Database.instance(None)
+    # _db = Database.instance(None)
     # Select from products dB using params Group,Order,Limit
-    #sel = Select("products", ["product_id"], None, None, 5)
-    #products = []
+    # sel = Select("products", ["product_id"], None, None, 5)
+    # products = []
     # TODO:
     """
         If statement checks if the user has ordered anything before the recommend
         five items. If not recommend five random items from product list. 
     """
-    #for product in get_record(sel):
+    # for product in get_record(sel):
     #    products.append(product[0])
+    """
     if products:
         msg = "I would like to recommend {}".format(str(products))
         await message.author.send(msg)
     else:
         await message.author.send("Server side error. Try again later.")
+    """
