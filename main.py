@@ -21,9 +21,9 @@ Options:
   --headers=<headers>      Headers for the db file in the order they appear
   --db=<db>                Database to use
 """
-#import json
+# import json
 
-#from docopt import docopt
+# from docopt import docopt
 import os
 
 from bot import discordbot
@@ -32,6 +32,7 @@ from db.sql.connection.singleton import Database
 from orders.handler import create_order_table
 from user.handler import create_users_table
 from user.orders import create_user_order_table
+
 
 def build_db(database, table, headers):
     """
@@ -58,11 +59,11 @@ def upload_csv(headers, has_headers):
 
 
 if __name__ == "__main__":
-    #arguments = docopt(__doc__, version='Database Project 0.1')
-    #database = arguments.get("--database", "project.db")
-    #table = arguments.get("--table", "productdata")
-    #headers = arguments.get("--headers", None)
-    #if headers:
+    # arguments = docopt(__doc__, version='Database Project 0.1')
+    # database = arguments.get("--database", "project.db")
+    # table = arguments.get("--table", "productdata")
+    # headers = arguments.get("--headers", None)
+    # if headers:
     #    headers = json.loads(headers)
     headers = {
         "product_id": "varchar",

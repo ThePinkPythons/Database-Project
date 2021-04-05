@@ -5,7 +5,7 @@ Discord Message Handler
 from bot import orderHandler
 from bot import recommend
 from bot.orderHandler import check_if_user_has_account, create_new_order
-from user.handler import User, GetUsers
+from user.handler import User
 
 CURRENTUSERACTION = None
 NEWORDER = None

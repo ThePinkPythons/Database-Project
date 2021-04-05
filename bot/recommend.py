@@ -33,7 +33,7 @@ async def recommend(message):
     # Select from products dB using params Group,Order,Limit
     sel = Select("products", ["product_id"], None, None, 5)
     products = []
-    ##TODO:
+    # TODO:
     """
         If statement checks if the user has ordered anything before the recommend
         five items. If not recommend five random items from product list. 

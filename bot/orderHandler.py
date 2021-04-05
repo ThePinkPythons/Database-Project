@@ -34,9 +34,10 @@ async def create_order_line_items(user_name, message):
 
 
 async def order(message):
-    products = GetProduct()
+    #  products = GetProduct()
     # Create for loop for getting all products
     # product.by
+    pass
 
 
 async def cancel(message):
