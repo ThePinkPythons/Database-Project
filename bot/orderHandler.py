@@ -1,10 +1,8 @@
 from random import randint
 
-from db.crud.executor import get_record
-from db.sql.query.utilities import create_select
 from orders.handler import Order
-from user.handler import GetUsers
 from products.handler import GetProduct
+from user.handler import GetUsers
 
 MIN = 1
 MAX = 999999
@@ -34,10 +32,19 @@ async def create_order_line_items(user_name, message):
     except Exception as e:
         print(e)
 
+
 async def order(message):
     products = GetProduct()
-    #Create for loop for getting all products
-    product.by
+    # Create for loop for getting all products
+    # product.by
+
+
+async def cancel(message):
+    user = GetUsers()
+    user.by_email(message.author.name)
+    user = user.query()
+    await message.channel.send("There are no orders to cancel for user | " + message.author.name)
+
 
 async def create_new_order(message):
     """Create new order and convert to list"""

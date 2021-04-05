@@ -3,19 +3,16 @@ Discord Message Handler
 """
 
 from bot import orderHandler
-from bot.orderHandler import check_if_user_has_account, create_new_order
-from db.crud.executor import get_record
-from db.sql.connection.singleton import Database
-from db.sql.query.builder import Select
-from db.sql.query.utilities import create_select
-from user.handler import User, GetUsers
 from bot import recommend
+from bot.orderHandler import check_if_user_has_account, create_new_order
+from user.handler import User, GetUsers
 
 CURRENTUSERACTION = None
 NEWORDER = None
 CANCELLING = None
 
-##TODO: Split file into other files.
+
+# TODO: Split file into other files.
 
 
 async def handle(message):
@@ -35,10 +32,7 @@ async def handle(message):
             )
 
     if message.content.startswith('!CANCEL'):
-        user = GetUsers()
-        user.by_email(message.author.name)
-        user = user.query()
-        await message.channel.send("There are no orders to cancel for user | " + message.author.name)
+        orderHandler.cancel(message)
 
     if message.content.startswith("!STATUS"):
         # Status function
@@ -63,11 +57,13 @@ async def handle(message):
 
     if message.content.startswith('!HELP'):
         await message.author.send(
-            'To create an account type: account'
+            'To create an account type: add'
             '\nFor past orders type: orders'
             '\nFor recommended products type: recommended'
             '\nFor products that cost less than $20 type: below20'
-            '\nTo create a new order type: new')
+            '\nTo create a new order type: new'
+            '\nTo cancel an order type: cancel'
+            '\nTo get the status of an order type: status')
 
     if message.content.startswith('!ORDERS'):
         orderHandler.order(message)

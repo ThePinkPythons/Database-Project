@@ -19,7 +19,7 @@ async def on_message(message):
         return
     else:
         message.content = message.content.upper()
-        if (message.content[:1] != "!"):
+        if message.content[:1] != "!":
             message.content = str("!" + message.content)
         print(message.content)
         await discordRequestHandler.handle(message)
