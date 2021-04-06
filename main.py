@@ -74,6 +74,5 @@ if __name__ == "__main__":
     build_db(":memory:", "products", headers)
     create_order_table()
     create_users_table()
-    create_user_order_table()
     upload_csv(headers.keys(), has_headers=True)
     discordbot.start()

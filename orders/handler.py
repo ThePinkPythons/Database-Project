@@ -29,12 +29,13 @@ class Order(DatabaseObject):
     setting new product ids repeatedly.
     """
 
-    def __init__(self, author_id,order_id, address, city, state, zip):
+    def __init__(self, author_id, order_id, status, address, city, state, zip):
         """
         Constructor
 
         :param author_id:   author_id
         :param order_id:    order_id
+        :param status:    Status
         :param address:   Shipping address
         :param city:    Shipping city
         :param state:   Shipping state
@@ -46,6 +47,7 @@ class Order(DatabaseObject):
             "price": None,
             "author_id": author_id,
             "order_id": str(uuid4()),
+            "status": status,
             "address": address,
             "city": city,
             "state": state,
