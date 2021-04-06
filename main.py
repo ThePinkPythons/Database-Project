@@ -21,10 +21,10 @@ Options:
   --headers=<headers>      Headers for the db file in the order they appear
   --db=<db>                Database to use
 """
-# import json
-
-# from docopt import docopt
+import json
 import os
+
+from docopt import docopt
 
 from bot import discordbot
 from db.io.manager import write_csv_to_sql
@@ -58,20 +58,21 @@ def upload_csv(headers, has_headers):
 
 
 if __name__ == "__main__":
-    # arguments = docopt(__doc__, version='Database Project 0.1')
-    # database = arguments.get("--database", "project.db")
-    # table = arguments.get("--table", "productdata")
-    # headers = arguments.get("--headers", None)
-    # if headers:
-    #    headers = json.loads(headers)
-    headers = {
-        "product_id": "varchar",
-        "quantity": "integer",
-        "wholesale_price": "double precision",
-        "sale_price": "double precision",
-        "supplier_id": "varchar"
-    }
-    build_db(":memory:", "products", headers)
+    arguments = docopt(__doc__, version='Database Project 0.1')
+    database = arguments.get("--database", ":memory:")
+    table = arguments.get("--table", "productdata")
+    headers = arguments.get("--headers", None)
+    if headers:
+        headers = json.loads(headers)
+    else:
+        headers = {
+            "product_id": "varchar",
+            "quantity": "integer",
+            "wholesale_price": "double precision",
+            "sale_price": "double precision",
+            "supplier_id": "varchar"
+        }
+    build_db(database, "products", headers)
     create_order_table()
     create_users_table()
     upload_csv(headers.keys(), has_headers=True)
