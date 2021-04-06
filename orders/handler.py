@@ -94,7 +94,7 @@ class Order(DatabaseObject):
                 raise ValueError("Price and Quantity not Set")
             create = Create("orders", self._order.keys())
             create_records(
-                self._order.keys, create, [self._order])
+                self._order.keys(), create, [self._order])
             return self._order["order_id"]
         else:
             print("CANNOT CREATE ORDER WITHOUT A CITY STATE OR ADDRESS")
@@ -120,7 +120,7 @@ class CancelOrder(object):
             "order_id": self._order_id,
             "status": "cancelled"
         }
-        update = Update("order", mapping)
+        update = Update("orders", mapping)
         update_record(update)
 
 

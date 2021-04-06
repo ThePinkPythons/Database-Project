@@ -3,25 +3,23 @@ Tests for the table
 """
 
 import unittest
+from _msi import CreateRecord
 
 from db.sql.connection.singleton import Database
-from orders.handler import CancelOrder
+from orders.handler import CancelOrder, Order, ORDER_TABLE_MAPPING
 
 
 class OrderTests(unittest.TestCase):
 
     def test_update_record(self):
-        mp = {
-            "order_id": "varchar",
-            "status": "varchar"
-        }
-        keys = mp.keys()
-        _db = Database.instance(":memory:", "test_table", mp)
-        data = [{
-            "order_id": "test_id",
-            "status": "active"
-        }]
-        CancelOrder(["order_id", "status"], "")
+        _db = Database.instance(":memory:", "orders", ORDER_TABLE_MAPPING)
+        order = Order("test_author", "test", "active", "test", "test", "test")
+        order.quantity(1)
+        order.price(2)
+        order.save()
+        cancel = CancelOrder("test_id")
+        cancel.cancel()
+
 
     def test_create_order_table(self):
         pass
