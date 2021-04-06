@@ -2,7 +2,7 @@
 A query using the decorator pattern
 """
 from db.sql.query.utilities import create_select, create_update_sql, delete_record, create_insert, \
-    get_create_table_statement
+    get_create_table_statement, get_drop_table_statement
 
 
 class BaseQuery(object):
@@ -88,7 +88,7 @@ class Select(BaseQuery):
         :param fields:  Fields list
         :param group:   Group by clause
         :param order:   Order clause
-        :param limit:   Maximum number of records to reurn
+        :param limit:   Maximum number of records to return
         """
         super().__init__()
         self._table = table
@@ -128,6 +128,14 @@ class Update(BaseQuery):
         self._table = table
         self._mapping = mapping
 
+    def set_mapping(self, mapping):
+        """
+        Allows users to set the mapping later
+
+        :param mapping: The mapping of fields to values
+        """
+        self._mapping = mapping
+
     def __str__(self):
         """
         Gets the update query
@@ -138,7 +146,7 @@ class Update(BaseQuery):
             where = " AND ".join(self._conditions)
         else:
             where = None
-        return create_update_sql(self._table, self._mapping, where)  
+        return create_update_sql(self._table, self._mapping, where)
 
 
 class Delete(BaseQuery):
@@ -226,3 +234,26 @@ class CreateTable(BaseQuery):
         :return:    The query
         """
         return get_create_table_statement(self._table, self._mapping)
+
+
+class DropTable(BaseQuery):
+    """
+    Drop the table
+    """
+
+    def __init__(self, table):
+        """
+        Constructor for drop table
+
+        :param table: The table to drop
+        """
+        super().__init__()
+        self._table = table
+
+    def __str__(self):
+        """
+        Generates a drop table statement
+
+        :return:    The query
+        """
+        return get_drop_table_statement(self._table)

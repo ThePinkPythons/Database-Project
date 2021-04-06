@@ -101,3 +101,13 @@ def get_create_table_statement(table, mapping):
         columns.append("{} {}".format(k, v))
     sql = "{}{})".format(sql, ",".join(columns))
     return sql
+
+
+def get_drop_table_statement(table):
+    """
+    Drop the table
+
+    :param table:   The table to drop
+    """
+    sql = "DROP TABLE {}".format(table)
+    return sql

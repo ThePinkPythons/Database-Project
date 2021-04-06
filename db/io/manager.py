@@ -32,11 +32,17 @@ def write_csv_to_sql(filepath, db=":memory:", table="products", headers=None, ha
     csv_headers = None
     if has_headers is False:
         csv_headers = headers
-    csv = CSVSource(filepath, headers=csv_headers, batch_size=batch_size)
+    elif headers:
+        csv_headers = headers
+    csv = CSVSource(filepath, headers=csv_headers, has_headers=has_headers, batch_size=batch_size)
     try:
         for batch in csv:
-            query = Create(table, headers)
-            create_records(headers, query, batch)
+            if len(batch) > 0:
+                if has_headers:
+                    record = batch[0]
+                    headers = record.keys()
+                query = Create(table, headers)
+                create_records(headers, query, batch)
     finally:
         csv.close()
 
