@@ -18,7 +18,7 @@ async def check_if_user_has_account(user_name):
     else:
         return False
 
-
+#TODO:
 async def create_order_line_items(user_name, message):
     """Append new list to the orders table"""
     user = GetUsers()
@@ -34,28 +34,31 @@ async def create_order_line_items(user_name, message):
 
 
 async def orders(message):
+    """Used to view past orders."""
     user_orders = []
-    products = GetProduct()
+    products = GetOrders()
     # Create for loop for getting all products
-
-    products.by_author_id(message.author)
+    for orders in products.by_author_id(message.author):
+        user_orders.append(order)
+    print(user_orders)
     await message.author.send("Your past orders were: {}".format(str(user_orders)))
 
 
 async def cancel(message):
+    """Cancel a recently placed order."""
     user = GetUsers()
     user.by_author_id(message.author.name)
     user = user.query()
     await message.author.send("There are no orders to cancel for user | " + message.author.name)
 
-
+#TODO:
 async def create_new_order(message):
     """Create new order and convert to list"""
     order_details = message.content.split(",")
     order_details.append(randint(MIN, MAX))
     await create_order_line_items(message.author.name, order_details)
 
-
+#TODO:
 async def place_order(message):
     """Create a new order.
     First check if the user has an account.
@@ -64,15 +67,18 @@ async def place_order(message):
     """
     if await check_if_user_has_account(message.author.name):
         # await message.channel.send('Please enter the product_id and quantity you would like, separated by spaces')
-        await create_new_order(message)
-    if await check_if_user_has_account(message.author):
-        await message.author.send('Please enter the product_id and quantity you would like, separated by spaces')
-        # wait for the user's next message
-        NEWORDER = True
-        await create_new_order(message)
+        order_details = message.content.split(",")
+        #Remove !NEW from list
+        order_details.pop(0)
+        #Insert order_Id as order_details[2]
+        order_details.insert(0,randint(MIN,MAX))
+        order_details.insert(0,message.author.name)
+        try:
+            get_Total_Price = GetProduct()
+            get_Total_Price.by_product_id(order_details[2])
+            order_details.append(get_Total_Price.query())
+        except:
+            print("Product_ID does not exist.")
+        print(order_details)
     else:
-        await message.author.send(
-            'You must have a user to create an order.'
-            '\n To do this enter your address, city, state, and zip separated by spaces')
-        # wait for the user's next message
-        CURRENTUSERACTION = True
+        message.author.send("Please create an account using the '!ADD' command. Use !help for help")
