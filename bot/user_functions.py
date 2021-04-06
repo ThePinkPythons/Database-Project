@@ -19,6 +19,7 @@ async def add_user(message):
     try:
         User(new_account[0], new_account[1], new_account[2], new_account[3], new_account[4]).save()
         await message.author.send("The account has been created!")
+        print(new_account)
     except Exception as e:
         print(e)
         await message.author.send(

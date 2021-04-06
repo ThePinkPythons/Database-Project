@@ -31,7 +31,6 @@ from db.io.manager import write_csv_to_sql
 from db.sql.connection.singleton import Database
 from orders.handler import create_order_table
 from user.handler import create_users_table
-from user.orders import create_user_order_table
 
 
 def build_db(database, table, headers):
