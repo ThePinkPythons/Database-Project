@@ -19,7 +19,8 @@ ORDER_TABLE_MAPPING = {
     "address": "varchar",
     "city": "varchar",
     "state": "varchar",
-    "zip": "varchar"
+    "zip": "varchar",
+    "status": "varchar"
 }
 
 
@@ -29,7 +30,7 @@ class Order(DatabaseObject):
     setting new product ids repeatedly.
     """
 
-    def __init__(self, author_id, order_id, status, address, city, state, zip):
+    def __init__(self, author_id, order_id, status="active", address=None, city=None, state=None, zip=None):
         """
         Constructor
 
@@ -41,6 +42,8 @@ class Order(DatabaseObject):
         :param state:   Shipping state
         :param zip:     Shipping zip code
         """
+        if address is None and city is None and state is None:
+            print("CANNOT CREATE ORDER WITHOUT A CITY STATE OR ADDRESS")
         self._order = {
             "product_id": None,
             "quantity": None,
@@ -84,14 +87,33 @@ class Order(DatabaseObject):
 
         :return: Unique order uuid
         """
-        if self._order.get("price", None) and self._order.get("quantity", None):
-            self._order["total"] = self._order["price"] * self._order["quantity"]
+        if self._order.get("address", None) and self._order.get("city", None) and self._order.get("state"):
+            if self._order.get("price", None) and self._order.get("quantity", None):
+                self._order["total"] = self._order["price"] * self._order["quantity"]
+            else:
+                raise ValueError("Price and Quantity not Set")
+            create = Create("orders", self._order.keys())
+            create_records(
+                self._order.keys, create, [self._order])
+            return self._order["order_id"]
         else:
-            raise ValueError("Price and Quantity not Set")
-        create = Create("orders", self._order.keys())
-        create_records(
-            self._order.keys, create, [self._order])
-        return self._order["order_id"]
+            print("CANNOT CREATE ORDER WITHOUT A CITY STATE OR ADDRESS")
+            print("ORDER NOT SUBMITTED")
+            return -1
+
+
+class CancelOrder(object):
+
+    def __init__(self, order_id):
+        """
+        Cancels an order
+
+        :param the order id
+        """
+        pass
+
+    def cancel(self):
+        pass
 
 
 class DeleteOrdersByUser(object):
