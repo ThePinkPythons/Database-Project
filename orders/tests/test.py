@@ -3,7 +3,6 @@ Tests for the table
 """
 
 import unittest
-from _msi import CreateRecord
 
 from db.sql.connection.singleton import Database
 from orders.handler import CancelOrder, Order, ORDER_TABLE_MAPPING, GetOrders
