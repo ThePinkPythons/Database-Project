@@ -1,5 +1,5 @@
 """
-User table handler. The UUID for a User is the email. User is not reusable.
+User table handler. The UUID for a User is the author_id. User is not reusable.
 """
 from db.crud.executor import create_records, get_record, delete_record, create_table
 from db.sql.query.builder import Create, Select, Delete, CreateTable
@@ -7,7 +7,7 @@ from db.templates.dbobject import DatabaseObject
 
 
 USER_TABLE_MAPPING = {
-    "email": "varchar",
+    "author_id": "varchar",
     "address": "varchar",
     "city": "varchar",
     "state": "varchar",
@@ -17,11 +17,11 @@ USER_TABLE_MAPPING = {
 
 class User(DatabaseObject):
 
-    def __init__(self, email, address, city, state, zip):
+    def __init__(self, author_id, address, city, state, zip):
         """
         Constructor
 
-        :param email:   User email
+        :param author_id:   User name
         :param address: User address
         :param city:    User city:
         :param state:   User state
@@ -29,7 +29,7 @@ class User(DatabaseObject):
         """
         super().__init__()
         self._user = {
-            "email": email,
+            "author_id": author_id,
             "address": address,
             "city": city,
             "state": state,
@@ -54,13 +54,13 @@ class GetUsers(object):
         self._fields = USER_TABLE_MAPPING.keys()
         self.select = Select("users", self._fields)
 
-    def by_email(self, email):
+    def by_author_id(self, author_id):
         """
-        Sets the email condition.
+        Sets the author_id condition.
 
-        :param email:   Email to search by
+        :param author_id:   author_id to search by
         """
-        self.select.equals("email", email)
+        self.select.equals("author_id", author_id)
 
     def by_address(self, address):
         """
@@ -120,19 +120,19 @@ class DeleteUser(object):
         """
         self.delete = Delete("orders")
 
-    def by_email(self, email):
+    def by_author_id(self, author_id):
         """
-        Deletes users with the given email
+        Deletes users with the given author_id
 
-        :param email:   Email to delete by
+        :param author_id:   author_id to delete by
         """
-        self.delete.equals("email", email)
+        self.delete.equals("author_id", author_id)
 
     def in_city(self, city):
         """
         Deletes users in the given city
 
-        :param state:   The city
+        :param city:   The city
         """
         self.delete.equals("city", city)
 

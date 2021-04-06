@@ -2,10 +2,8 @@
 Discord Message Handler
 """
 
-from bot import orderHandler
+from bot import orderHandler, user_functions
 from bot import recommend
-from bot.orderHandler import check_if_user_has_account, create_new_order
-from user.handler import User
 
 CURRENTUSERACTION = None
 NEWORDER = None
@@ -18,21 +16,11 @@ CANCELLING = None
 async def handle(message):
     """Handler user message"""
     if message.content.startswith('!ADD'):
-        new_account = message.content.replace("!ADD", "").split(",")
-        new_account.pop(0)
-        new_account.insert(0, message.author.name)
-        try:
-            User(new_account[0], new_account[1], new_account[2], new_account[3], new_account[4]).save()
-            await message.channel.send("The account has been created!")
-        except Exception as e:
-            print(e)
-            await message.channel.send(
-                'The account could not be created make sure all details is provided.'
-                '\n !ADD,address,city,state,zip'
-            )
+        """This function creates a new user. """
+        await user_functions.add_user()
 
     if message.content.startswith('!CANCEL'):
-
+        """This function will set the status of an order to cancelled."""
         await orderHandler.cancel(message)
 
     if message.content.startswith("!STATUS"):
@@ -41,44 +29,26 @@ async def handle(message):
 
     if message.content.startswith('!NEW'):
         # New Order Function
-        if await check_if_user_has_account(message.author.name):
-            # await message.channel.send('Please enter the product_id and quantity you would like, separated by spaces')
-            await create_new_order(message)
-        if await orderHandler.check_if_user_has_account(message.author):
-            await message.author.send('Please enter the product_id and quantity you would like, separated by spaces')
-            # wait for the user's next message
-            NEWORDER = True
-            await orderHandler.create_new_order(message)
-        else:
-            await message.author.send(
-                'You must have a user to create an order.'
-                '\n To do this enter your email, address, city, state, and zip separated by spaces')
-            # wait for the user's next message
-            CURRENTUSERACTION = True
+        await orderHandler.place_order()
 
     if message.content.startswith('!HELP'):
-        await message.author.send(
-            'To create an account type: add'
-            '\nFor past orders type: orders'
-            '\nFor recommended products type: recommended'
-            '\nFor products that cost less than $20 type: below20'
-            '\nTo create a new order type: new'
-            '\nTo cancel an order type: cancel'
-            '\nTo get the status of an order type: status')
+        """This will call the help function from 'user_functions' and display commands."""
+        await user_functions.get_help()
 
     if message.content.startswith('!ORDERS'):
-
-        await orderHandler.order(message)
+        """This function displays the users order history by order Id with product_id, 
+           quantity, price and status. 
+        """
+        await orderHandler.orders()
 
     if message.content.startswith('!RECOMMENDED'):
-        """This function currently checks to see if the user has previous orders.
-           If they do not it returns a list of five items by their product Id.
+        """This function currently returns a list of five random items by their product Id.
         """
-        await recommend.recommend(message)
+        await recommend.recommend()
 
     if message.content.startswith('!BELOW'):
         """This function should now be able to handle more than just $20.
            This function searches the product dB and displays the first
            ten values under the price input by the user.
         """
-        await recommend.below(message)
+        await recommend.below()

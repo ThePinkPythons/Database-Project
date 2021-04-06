@@ -14,7 +14,7 @@ ORDER_TABLE_MAPPING = {
     "quantity": "integer",
     "price": "double precision",
     "total": "double_precision",
-    "email": "varchar",
+    "author_id": "varchar",
     "order_id": "varchar",
     "address": "varchar",
     "city": "varchar",
@@ -29,11 +29,11 @@ class Order(DatabaseObject):
     setting new product ids repeatedly.
     """
 
-    def __init__(self, email, address, city, state, zip):
+    def __init__(self, author_id, address, city, state, zip):
         """
         Constructor
 
-        :param email:   Email address
+        :param author_id:   author_id
         :param address:   Shipping address
         :param city:    Shipping city
         :param state:   Shipping state
@@ -43,7 +43,7 @@ class Order(DatabaseObject):
             "product_id": None,
             "quantity": None,
             "price": None,
-            "email": email,
+            "author_id": author_id,
             "order_id": str(uuid4()),
             "address": address,
             "city": city,
@@ -93,20 +93,20 @@ class Order(DatabaseObject):
 
 class DeleteOrdersByUser(object):
 
-    def __init__(self, email):
+    def __init__(self, author_id):
         """
         Constructor
 
-        :param email:  Email uuid for the customer
+        :param author_id:  Author_id uuid for the customer
         """
-        self._email = email
+        self._author_id = author_id
 
     def delete(self):
         """
         Run the delete
         """
         delete = Delete("orders")
-        delete.equals("email", self._email)
+        delete.equals("author_id", self._author_id)
         delete_record(delete)
 
 
@@ -126,13 +126,13 @@ class DeleteOrders(object):
         """
         self.delete.equals("product_id", product_id)
 
-    def by_user(self, email):
+    def by_author_id(self, author_id):
         """
         Delete orders with the given user
 
-        :param email:    The user email
+        :param author_id:    The user author_id
         """
-        self.delete.equals("email", email)
+        self.delete.equals("author_id", author_id)
 
     def delete(self):
         """
@@ -144,23 +144,23 @@ class DeleteOrders(object):
 
 class GetOrders(object):
 
-    def __init__(self, email):
+    def __init__(self, author_id):
         """
         Constructor
 
-        :param email:   Email user id to orders by
+        :param author_id:   author_id to orders by
         """
         self._fields = ORDER_TABLE_MAPPING.keys()
         self.select = Select("orders", self._fields)
-        self.select.equals("email", email)
+        self.select.equals("author_id", author_id)
 
-    def by_user(self, email):
+    def by_author_id(self, author_id):
         """
-        Get the user with the specific email
+        Get the user with the specific author_id
 
-        :param email:   The user email
+        :param author_id:   The user author_id
         """
-        self.select.equals("email", email)
+        self.select.equals("author_id", author_id)
     
     def with_product_id(self, product_id):
         """

@@ -61,6 +61,14 @@ class GetOrder(object):
         """
         self.select.equals("order_id", order_id)
 
+    def by_author_id(self, author_id):
+        """
+                Get product based of order id
+
+                :param author_id:  The product id
+                """
+        self.select.equals("order_id", author_id)
+
 
 def create_user_order_table():
     """

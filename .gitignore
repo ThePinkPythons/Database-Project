@@ -7,3 +7,4 @@ productdata
 *.db
 venv
 .DS_Store
+product_data.csv
