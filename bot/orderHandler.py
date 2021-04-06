@@ -1,8 +1,7 @@
 from random import randint
 
-
 from orders.handler import Order, GetOrders
-from products.handler import GetProduct
+from products.handler import GetProduct, Product
 
 from user.handler import GetUsers
 
@@ -64,6 +63,7 @@ async def create_new_order(message):
 
 
 # TODO:
+
 async def place_order(message):
     """Create a new order.
     First check if the user has an account.
@@ -75,6 +75,7 @@ async def place_order(message):
         order_details = message.content.split(",")
         # Remove !NEW from list
         order_details.pop(0)
+
         # Insert order_Id as order_details[2]
         order_details.insert(0, randint(MIN, MAX))
         order_details.insert(0, message.author.name)
@@ -84,6 +85,10 @@ async def place_order(message):
             order_details.append(get_Total_Price.query())
         except:
             print("Product_ID does not exist.")
+
+        # Insert order_Id as order_details[2]
+        order_details.insert(0, randint(MIN, MAX))
+        order_details.insert(0, message.author.name)
         print(order_details)
         product_id_details = GetProduct()
         product_id_details.by_product_id(order_details[2])
@@ -91,7 +96,8 @@ async def place_order(message):
         product_id_details = product_id_details[0]
         print(product_id_details)
         # quantity, wholesale, sale , supplier product_id
-        Product(order_details[2], product_id_details['wholesale_price'], product_id_details['sale_price'], product_id_details['supplier_id']).save()
+        Product(order_details[2], product_id_details['wholesale_price'], product_id_details['sale_price'],
+                product_id_details['supplier_id']).save()
 
     else:
         message.author.send("Please create an account using the '!ADD' command. Use !help for help")
