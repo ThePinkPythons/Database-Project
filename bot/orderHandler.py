@@ -1,7 +1,7 @@
 from random import randint
 
 from orders.handler import Order
-from products.handler import GetProduct
+from products.handler import GetProduct,Product
 from user.handler import GetUsers
 
 MIN = 1
@@ -18,19 +18,6 @@ async def check_if_user_has_account(user_name):
     else:
         return False
 
-#TODO:
-async def create_order_line_items(user_name, message):
-    """Append new list to the orders table"""
-    user = GetUsers()
-    user.by_author_id(user_name)
-    user = user.query()
-    try:
-        user = list(user[0].keys())
-        print(message)
-        new_order = Order(user[0], user[1], user[2], user[3], user[4], message[1], message[2], message[4],
-                          message[3]).save()
-    except Exception as e:
-        print(e)
 
 
 async def orders(message):
@@ -52,13 +39,6 @@ async def cancel(message):
     await message.author.send("There are no orders to cancel for user | " + message.author.name)
 
 #TODO:
-async def create_new_order(message):
-    """Create new order and convert to list"""
-    order_details = message.content.split(",")
-    order_details.append(randint(MIN, MAX))
-    await create_order_line_items(message.author.name, order_details)
-
-#TODO:
 async def place_order(message):
     """Create a new order.
     First check if the user has an account.
@@ -66,19 +46,20 @@ async def place_order(message):
         product_id and quantity.
     """
     if await check_if_user_has_account(message.author.name):
-        # await message.channel.send('Please enter the product_id and quantity you would like, separated by spaces')
         order_details = message.content.split(",")
         #Remove !NEW from list
         order_details.pop(0)
         #Insert order_Id as order_details[2]
         order_details.insert(0,randint(MIN,MAX))
         order_details.insert(0,message.author.name)
-        try:
-            get_Total_Price = GetProduct()
-            get_Total_Price.by_product_id(order_details[2])
-            order_details.append(get_Total_Price.query())
-        except:
-            print("Product_ID does not exist.")
         print(order_details)
+        product_id_details = GetProduct()
+        product_id_details.by_product_id(order_details[2])
+        product_id_details = product_id_details.query()
+        product_id_details = product_id_details[0]
+        print(product_id_details)
+        #quantity, wholesale, sale , supplier product_id
+        Product(order_details[2],product_id_details['wholesale_price'],product_id_details['sale_price'],product_id_details['supplier_id']).save()
+
     else:
-        message.author.send("Please create an account using the '!ADD' command. Use !help for help")
+        await message.author.send("Please create an account using the '!ADD' command. Use !help for help")
