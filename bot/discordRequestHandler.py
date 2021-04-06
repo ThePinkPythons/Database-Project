@@ -5,6 +5,7 @@ Discord Message Handler
 from bot import orderHandler, user_functions
 from bot import recommend
 
+
 # TODO: Split file into other files.
 
 
@@ -21,7 +22,6 @@ async def handle(message):
     elif message.content.startswith("!STATUS"):
         """This function will get the status of an order based off of the order Id"""
         await orderHandler.order_status(message)
-
 
     elif message.content.startswith('!NEW'):
         """This functions creates a new order"""
