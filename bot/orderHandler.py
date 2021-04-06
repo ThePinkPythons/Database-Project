@@ -57,6 +57,11 @@ async def create_new_order(message):
 
 
 async def place_order(message):
+    """Create a new order.
+    First check if the user has an account.
+    Requires:
+        product_id and quantity.
+    """
     if await check_if_user_has_account(message.author.name):
         # await message.channel.send('Please enter the product_id and quantity you would like, separated by spaces')
         await create_new_order(message)
