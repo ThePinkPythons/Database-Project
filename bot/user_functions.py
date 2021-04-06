@@ -1,5 +1,3 @@
-from discord import message
-
 from user.handler import User
 
 
@@ -14,7 +12,7 @@ async def get_help(message):
         '\nTo get the status of an order type: status')
 
 
-async def add_user():
+async def add_user(message):
     new_account = message.content.replace("!ADD", "").split(",")
     new_account.pop(0)
     new_account.insert(0, message.author.name)
