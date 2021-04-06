@@ -3,8 +3,8 @@ Order class
 """
 from uuid import uuid4
 
-from db.crud.executor import create_table, create_records, delete_record, get_record, drop_table
-from db.sql.query.builder import CreateTable, Delete, Create, Select, DropTable
+from db.crud.executor import create_table, create_records, delete_record, get_record, drop_table, update_record
+from db.sql.query.builder import CreateTable, Delete, Create, Select, DropTable, Update
 from db.templates.dbobject import DatabaseObject
 
 
@@ -110,10 +110,18 @@ class CancelOrder(object):
 
         :param the order id
         """
-        pass
+        self._order_id = order_id
 
     def cancel(self):
-        pass
+        """
+        Create the cancellation from an update query and execute it.
+        """
+        mapping = {
+            "order_id": self._order_id,
+            "status": "cancelled"
+        }
+        update = Update("order", mapping)
+        update_record(update)
 
 
 class DeleteOrdersByUser(object):
