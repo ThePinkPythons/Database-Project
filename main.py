@@ -21,14 +21,18 @@ Options:
   --headers=<headers>      Headers for the db file in the order they appear
   --db=<db>                Database to use
 """
+import atexit
 import json
 import os
 
 from docopt import docopt
 
 from bot import discordbot
+from db.crud.executor import get_record
 from db.io.manager import write_csv_to_sql
+from db.io.sink import CSVSink
 from db.sql.connection.singleton import Database
+from db.sql.query.builder import Select
 from orders.handler import create_order_table
 from user.handler import create_users_table
 
@@ -57,6 +61,34 @@ def upload_csv(headers, has_headers):
     write_csv_to_sql(fpath, headers=headers, has_headers=has_headers)
 
 
+def save_csv():
+    """
+    Save a backup of the database to CSV. Select all records and push to disk.
+    """
+    headers = [
+        "product_id",
+        "quantity",
+        "price",
+        "total",
+        "author_id",
+        "order_id",
+        "address",
+        "city",
+        "state",
+        "zip",
+        "status"
+    ]
+    fpath = os.getcwd()
+    fpath = os.path.sep.join([fpath, "productdata", "product_data.csv"])
+    select = Select("orders", headers)
+    data_out = []
+    for record in get_record(select):
+        record = dict(zip(headers, record))
+        data_out.append(record)
+    writer = CSVSink(fpath, headers)
+    writer.writerows(data_out)
+
+
 if __name__ == "__main__":
     arguments = docopt(__doc__, version='Database Project 0.1')
     database = arguments.get("--database", ":memory:")
@@ -76,4 +108,5 @@ if __name__ == "__main__":
     create_order_table()
     create_users_table()
     upload_csv(headers.keys(), has_headers=True)
+    atexit.register(save_csv)
     discordbot.start()

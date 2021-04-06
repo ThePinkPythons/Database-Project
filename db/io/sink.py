@@ -1,7 +1,7 @@
 """
 CSV Sink
 """
-
+import atexit
 import csv
 
 
@@ -17,6 +17,7 @@ class CSVSink(object):
         self._fp = open(fpath, 'w', newline='')
         self._writer = csv.DictWriter(self._fp, fieldnames=headers)
         self._writer.writeheader()
+        atexit.register(self.close)
 
     def close(self):
         """
