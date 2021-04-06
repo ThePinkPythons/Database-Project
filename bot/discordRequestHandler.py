@@ -1,82 +1,53 @@
 """
 Discord Message Handler
 """
-from db.crud.executor import get_record
-from db.sql.connection.singleton import Database
-from db.sql.query.builder import Select
-from db.sql.query.builder import CreateTable, Create, Select
-from db.sql.query.utilities import create_select, delete_record
-from random import randint
-from bot.orderHandler import check_if_user_has_account,create_new_order
+
+from bot import orderHandler, user_functions
+from bot import recommend
 
 
-CURRENTUSERACTION = None
-NEWORDER = None
-CANCELLING = None
+# TODO: Split file into other files.
 
 
 async def handle(message):
-    if message.content.startswith('!CANCEL'):
-        # Cancel function
-        pass
+    """Handler user message"""
+    if message.content.startswith('!ADD'):
+        """This function creates a new user. """
+        await user_functions.add_user(message)
 
-    if message.content.startswith("!STATUS"):
-        # Status function
-        await message.author.send("The status of this order is...")
+    elif message.content.startswith('!CANCEL'):
+        """This function will set the status of an order to cancelled."""
+        await orderHandler.cancel(message)
 
-    if message.content.startswith('!NEW'):
-        # New Order Function
-        if await orderHandler.check_if_user_has_account(message.author):
-            await message.author.send('Please enter the product_id and quantity you would like, separated by spaces')
-            # wait for the user's next message
-            NEWORDER = True
-            await orderHandler.create_new_order(message)
-        else:
-            await message.author.send(
-                'You must have a user to create an order.'
-                '\n To do this enter your email, address, city, state, and zip separated by spaces')
-            # wait for the user's next message
-            CURRENTUSERACTION = True
+    elif message.content.startswith("!STATUS"):
+        """This function will get the status of an order based off of the order Id"""
+        await orderHandler.order_status(message)
 
-    if message.content.startswith('!HELP'):
-        await message.author.send(
-            'To create an account type: account'
-            '\nFor past orders type: orders'
-            '\nFor recommended products type: recommended'
-            '\nFor products that cost less than $20 type: below20'
-            '\nTo create a new order type: new')
+    elif message.content.startswith('!NEW'):
+        """This functions creates a new order"""
+        await orderHandler.place_order(message)
 
-    if message.content.startswith('!ORDERS'):
-        await message.author.send('This functionality currently does not exist. '
-                                  '\nPlease check during a later sprint. ')
+    elif message.content.startswith('!HELP'):
+        """This will call the help function from 'user_functions' and display commands."""
+        await user_functions.get_help(message)
 
-    if message.content.startswith('!RECOMMENDED'):
-        await message.author.send('This functionality currently does not exist. '
-                                   '\nPlease check during a later sprint. ')
-
-    if message.content.startswith('!BELOW'):
-        """This function should now be able to handle more than just $20.
-            This function searches the product dB and displays the first
-            ten values under the price input by the user.
+    elif message.content.startswith('!ORDERS'):
+        """This function displays the users order history by order Id with product_id,
+           quantity, price and status.
         """
-        # Substring the user's input to get the integer value.
-        below = message.content[6:]
-        # Check if the Substring contains a digit.
-        if below.isdigit():
-            _db = Database.instance(None)
-            sel = Select("products", ["product_id"])
-            sel.less_than_or_equal_to("sale_price", below)
-            products = []
-            for product in get_record(sel):
-                products.append(product[0])
-            if products:
-                msg = "The products below ", below, " are: {}".format(str(products[:10]))
-                await message.author.send(msg)
-            else:
-                await message.author.send("Server side error. Try again later.")
-        else:
-            # Simple help response if the user inputs something other than a digit.
-            await message.author.send(
-                'Please type a integer after !BELOW'
-                '\n Example !BELOW20'
-                '\n this will return the first ten items below $20')
+        await orderHandler.orders(message)
+
+    elif message.content.startswith('!RECOMMENDED'):
+        """This function currently returns a list of five random items by their product Id.
+        """
+        await recommend.recommend(message)
+
+    elif message.content.startswith('!BELOW'):
+        """This function should now be able to handle more than just $20.
+           This function searches the product dB and displays the first
+           ten values under the price input by the user.
+        """
+        await recommend.below(message)
+
+    else:
+        await message.author.send("I do ont understand this message. Use !Help for help.")

@@ -88,7 +88,7 @@ class Select(BaseQuery):
         :param fields:  Fields list
         :param group:   Group by clause
         :param order:   Order clause
-        :param limit:   Maximum number of records to reurn
+        :param limit:   Maximum number of records to return
         """
         super().__init__()
         self._table = table
@@ -146,7 +146,7 @@ class Update(BaseQuery):
             where = " AND ".join(self._conditions)
         else:
             where = None
-        return create_update_sql(self._table, self._mapping, where)  
+        return create_update_sql(self._table, self._mapping, where)
 
 
 class Delete(BaseQuery):
