@@ -19,11 +19,12 @@ async def handle(message):
         await orderHandler.cancel(message)
 
     elif message.content.startswith("!STATUS"):
-        # Status function
-        await message.author.send("The status of this order is...")
+        """This function will get the status of an order based off of the order Id"""
+        await orderHandler.order_status(message)
+
 
     elif message.content.startswith('!NEW'):
-        # New Order Function
+        """This functions creates a new order"""
         await orderHandler.place_order(message)
 
     elif message.content.startswith('!HELP'):

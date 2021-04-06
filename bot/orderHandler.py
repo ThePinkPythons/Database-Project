@@ -85,3 +85,8 @@ async def place_order(message):
         print(order_details)
     else:
         message.author.send("Please create an account using the '!ADD' command. Use !help for help")
+
+
+async def order_status(message):
+    # TODO get the order Id and return the order id, product id, and status
+    pass
