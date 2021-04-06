@@ -1,7 +1,6 @@
 from random import randint
 
 from orders.handler import Order
-from products.handler import GetProduct
 from user.handler import GetUsers
 
 MIN = 1
