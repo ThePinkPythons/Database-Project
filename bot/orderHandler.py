@@ -58,7 +58,7 @@ async def cancel(message):
 async def create_new_order(message):
     """Create new order and convert to list"""
     order_details = message.content.split(",")
-    order_details.append(randint(MIN, MAX))
+    # order_details.append(randint(MIN, MAX))
     await create_order_line_items(message.author.name, order_details)
 
 
@@ -87,8 +87,8 @@ async def place_order(message):
             print("Product_ID does not exist.")
 
         # Insert order_Id as order_details[2]
-        order_details.insert(0, randint(MIN, MAX))
-        order_details.insert(0, message.author.name)
+        # order_details.insert(0, randint(MIN, MAX))
+        # order_details.insert(0, message.author.name)
         print(order_details)
         product_id_details = GetProduct()
         product_id_details.by_product_id(order_details[2])
@@ -96,8 +96,8 @@ async def place_order(message):
         product_id_details = product_id_details[0]
         print(product_id_details)
         # quantity, wholesale, sale , supplier product_id
-        Product(order_details[2], product_id_details['wholesale_price'], product_id_details['sale_price'],
-                product_id_details['supplier_id']).save()
+        # Product(order_details[2], product_id_details['wholesale_price'], product_id_details['sale_price'],
+               # product_id_details['supplier_id']).save()
 
     else:
         message.author.send("Please create an account using the '!ADD' command. Use !help for help")
