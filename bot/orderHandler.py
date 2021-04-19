@@ -95,10 +95,10 @@ async def place_order(message):
         product_id_details.by_product_id(order_details[2])
         product_id_details = product_id_details.query()
         product_id_details = product_id_details[0]
-        # print(product_id_details)
+        print(product_id_details)
         # quantity, wholesale, sale , supplier product_id
-        # Product(order_details[2], product_id_details['wholesale_price'], product_id_details['sale_price'],
-        #       product_id_details['supplier_id']).save()
+        Product(order_details[2], product_id_details['wholesale_price'], product_id_details['sale_price'],
+        product_id_details['supplier_id'])
 
         await message.author.send("Thank you for your order! Your order was " + order_status + " and your order ID is " + str(order_details[1]) + ".")
 
