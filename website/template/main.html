@@ -2,11 +2,25 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <!--This will automatically refresh the site. For debugging set to 10 instead of 30-->
+    <meta http-equiv="refresh" content="25">
     <title>Website stats</title>
+    <link rel="shortcut icon" type="image/png" href="https://avatars.githubusercontent.com/u/78450133?s=400&u=2e94e64cc386d74abad25f0be82f08533b695629&v=4"/>
   </head>
-  <body style="background-color:#12141A;">
+  <body style="background-color:#12141A;font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;">
     <center>
-      <h1 style="color:pink;">Pink Python Website</h1>
+      <h1 style="color:#fe005d;">Pink Python data website</h1>
+      <div style="padding-bottom:50px;">
+          <img src="https://avatars.githubusercontent.com/u/78450133?s=400&u=2e94e64cc386d74abad25f0be82f08533b695629&v=4"></img>
+      </div>
+      <div style="display:inline-block; width:1000px;">
+          <p style="font-size: 130%; margin-left:10%; color:#fe005d; float:left;">Items sold today:   {{today}}</p>
+          <p style="font-size: 130%; margin-left:10%; color:#fe005d; float:right">Items sold yesterday:   {{yesterday}}</p>
+      </div>
+      <div style="display:inline-block; width:1000px;">
+          <p style="font-size: 130%; margin-left:10%; color:#b30042; float:left;">Most items sold today:   {{most_items_sold}}</p>
+          <p style="font-size: 130%; margin-left:10%; color:#b30042; float:right">Last item sold:   {{last_item_sold}}</p>
+      </div>
     </center>
   </body>
 </html>
