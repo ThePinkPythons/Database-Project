@@ -10,3 +10,6 @@ class AvailableProducts(models.Model):
 
     def __str__(self):
         self.product_id
+
+    class Meta:
+        db_table = "products"

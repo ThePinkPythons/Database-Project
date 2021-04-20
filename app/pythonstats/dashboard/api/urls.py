@@ -2,9 +2,9 @@
 REST API urls
 """
 
-from django.contrib import admin
+from dashboard.api.views import AvailableProductsApiView
 from django.conf.urls import url
-from django.urls import path, include
 
-
-urlpatterns = []
+urlpatterns = [
+    url(r'', AvailableProductsApiView.as_view())
+]

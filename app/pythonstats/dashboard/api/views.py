@@ -1,17 +1,16 @@
 """
 REST API Views
 """
-from django.http import JsonResponse
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import permissions
-from dashboard.models import AvailableProducts
-from rest_framework.views import APIView
 
-from .serializers import AvailableProductSerializer
+from dashboard.models import AvailableProducts
+from django.http import JsonResponse
+from rest_framework.views import APIView
 
 
 class AvailableProductsApiView(APIView):
+    """
+    Available Products API View
+    """
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
