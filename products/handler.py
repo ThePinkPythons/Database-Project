@@ -43,6 +43,7 @@ class Product(DatabaseObject):
         """
         Save the product
         """
+        #TODO FIX Bug on line 48
         create = Create("products", self._order.keys())
         create_records(
             self._order.keys, create, [self._product])
