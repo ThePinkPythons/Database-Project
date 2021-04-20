@@ -82,7 +82,7 @@ DATABASES = {
     }
 }
 
-CONN_MAX_AGE=None
+CONN_MAX_AGE = None
 
 
 # Password validation
