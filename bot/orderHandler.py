@@ -71,7 +71,7 @@ async def place_order(message):
         product_id and quantity.
     """
     if await check_if_user_has_account(message.author.name):
-        order_status = "Accepted"
+        new_order_status = "Accepted"
         # await message.channel.send('Please enter the product_id and quantity you would like, separated by spaces')
         order_details = message.content.split(",")
         # Remove !NEW from list
@@ -98,9 +98,11 @@ async def place_order(message):
         print(product_id_details)
         # quantity, wholesale, sale , supplier product_id
         Product(order_details[2], product_id_details['wholesale_price'], product_id_details['sale_price'],
-        product_id_details['supplier_id'])
+                product_id_details['supplier_id'])
 
-        await message.author.send("Thank you for your order! Your order was " + order_status + " and your order ID is " + str(order_details[1]) + ".")
+        await message.author.send(
+            "Thank you for your order! Your order was " + new_order_status + " and your order ID is " + str(
+                order_details[1]) + ".")
 
     else:
         await message.author.send("Please create an account using the '!ADD' command. Use !help for help")
