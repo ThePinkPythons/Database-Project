@@ -1,5 +1,5 @@
 """
-Serializes data from the API
+Serializes database from the API
 """
 
 from rest_framework import serializers

@@ -1,41 +1,41 @@
 """
-CS3250 Project. Includes Discord Chat Bot and CSV Reader
+CS3250 Project. Includes Discord Chat Bot and CSV Reader.
 
 Usage:
-    main.py <csv_path>
-    main.py <csv_path> [--db=<db>]
-    main.py <csv_path> [--table=<table>]
-    main.py <csv_path> [--headers=<headers>]
-    main.py <csv_path> [--table=<table>] [--headers=<headers>]
-    main.py <csv_path> [--headers=<headers>] [--table=<table>]
-    main.py <csv_path> [--db=<db>] [--headers=<headers>] [--table=<table>]
-    main.py <csv_path> [--headers=<headers>] [--db=<db>] [--table=<table>]
-    main.py <csv_path> [--headers=<headers>] [--table=<table>] [--db=<db>]
-    main.py <csv_path> [--table=<table>] [--headers=<headers>] [--db=<db>]
-    main.py <csv_path> [--table=<table>] [--db=<db>] [--headers=<headers>]
+    main.py [--csv_path=<csv_path>]
+    main.py [--csv_path=<csv_path>] [--db=<db>] [--create=<create>]
+    main.py [--csv_path=<csv_path>] [--table=<table>]
+    main.py [--csv_path=<csv_path>] [--headers=<headers>]
+    main.py [--csv_path=<csv_path>] [--table=<table>] [--headers=<headers>]
+    main.py [--csv_path=<csv_path>] [--headers=<headers>] [--table=<table>]
+    main.py [--csv_path=<csv_path>] [--db=<db>] [--headers=<headers>] [--table=<table>] [--create=<create>]
+    main.py [--csv_path=<csv_path>] [--headers=<headers>] [--db=<db>] [--table=<table>] [--create=<create>]
+    main.py [--csv_path=<csv_path>] [--headers=<headers>] [--table=<table>] [--db=<db>] [--create=<create>]
+    main.py [--csv_path=<csv_path>] [--table=<table>] [--headers=<headers>] [--db=<db>] [--create=<create>]
+    main.py [--csv_path=<csv_path>] [--table=<table>] [--db=<db>] [--headers=<headers>] [--create=<create>]
 
 Options:
   -h --help                Show this screen.
   --version                Show version.
-  --table=<table>          Name of the table in sqlite3
   --headers=<headers>      Headers for the db file in the order they appear
   --db=<db>                Database to use
+  --create=<create>        Tells the program to create the database
+  --csv_path=<csv_path>    Path to the product data csv for initializing the database
 """
-# import json
 
-# from docopt import docopt
+import json
 import os
+import threading
+
+from docopt import docopt
 
 from bot import discordbot
 from db.io.manager import write_csv_to_sql
 from db.sql.connection.singleton import Database
 from orders.handler import create_order_table
 from user.handler import create_users_table
-
-#website
 from website.manage import website
-import threading
-import sys
+
 
 def build_db(database, table, headers):
     """
@@ -61,38 +61,50 @@ def upload_csv(headers, has_headers):
     write_csv_to_sql(fpath, headers=headers, has_headers=has_headers)
 
 
-def start_discord():
-    # arguments = docopt(__doc__, version='Database Project 0.1')
-    # database = arguments.get("--database", "project.db")
-    # table = arguments.get("--table", "productdata")
-    # headers = arguments.get("--headers", None)
-    # if headers:
-    #    headers = json.loads(headers)
-    headers = {
-        "product_id": "varchar",
-        "quantity": "integer",
-        "wholesale_price": "double precision",
-        "sale_price": "double precision",
-        "supplier_id": "varchar"
-    }
-    build_db(":memory:", "products", headers)
-    create_order_table()
-    create_users_table()
-    upload_csv(headers.keys(), has_headers=True)
+def start_discord(arguments):
+    """
+    Starts the discord application using the command line.
+
+    :param arguments:   Arguments from docopt
+    """
+    database = arguments.get("--db", "db.sqlite3")
+    headers = arguments.get("--headers", None)
+    csv = arguments.get("--csv_path", None)
+    create = arguments.get("--create", "False")
+    if csv and create.lower() == "true":
+        if headers:
+            headers = json.loads(headers)
+        else:
+            headers = {
+                "product_id": "varchar",
+                "quantity": "integer",
+                "wholesale_price": "double precision",
+                "sale_price": "double precision",
+                "supplier_id": "varchar"
+            }
+        build_db(database, "products", headers)
+        create_order_table()
+        create_users_table()
+        upload_csv(headers.keys(), has_headers=True)
     discordbot.start()
 
+
 def start_website():
+    """
+    Start the associated statistics website
+    """
     website()
 
+
 if __name__ == "__main__":
-    start_discord()
-    """
+    arguments = docopt(__doc__, version='Database Project 0.1')
     threads = []
-    discord_thread = threading.Thread(target=start_discord)
+    discord_thread = threading.Thread(target=start_discord, args=(arguments, ))
     discord_thread.daemon = True
     threads.append(discord_thread)
     website_thread = threading.Thread(target=start_website)
     threads.append(website_thread)
     threads[0].start()
-    """
     #threads[1].start()
+    threads[0].join()
+    #threads[1].join()
