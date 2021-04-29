@@ -1,0 +1,173 @@
+<<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+    <!--This will automatically refresh the site. For debugging set to 10 instead of 30-->
+    <meta http-equiv="refresh" content="25">
+    <title>Website stats</title>
+    <link rel="shortcut icon" type="image/png" href="https://avatars.githubusercontent.com/u/78450133?s=400&u=2e94e64cc386d74abad25f0be82f08533b695629&v=4"/>
+  </head>
+  <body style="background-color:#12141A;font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;">
+    <center>
+      <h1 style="color:#fe005d;">Pink Python data website</h1>
+      <div style="padding-bottom:50px;">
+          <img src="https://avatars.githubusercontent.com/u/78450133?s=400&u=2e94e64cc386d74abad25f0be82f08533b695629&v=4"></img>
+      </div>
+      <div style="display:inline-block; width:1000px;">
+          <p style="font-size: 130%; margin-left:10%; color:#fe005d; float:left;">Items sold today:   {{today}}</p>
+          <p style="font-size: 130%; margin-left:10%; color:#fe005d; float:right">Items sold yesterday:   {{yesterday}}</p>
+      </div>
+      <div style="display:inline-block; width:1000px;">
+          <p style="font-size: 130%; margin-left:10%; color:#ffffff; float:left;">Most items sold today:   {{most_items_sold}}</p>
+          <p style="font-size: 130%; margin-left:10%; color:#ffffff; float:right;">Last item sold:   {{last_item_sold}}</p>
+      </div>
+      <br>
+      <br>
+      <div id='charts' style="display:inline-block;">
+           <canvas id="chart1" width="400" height="400" style="background-color: #181B23; padding: .2cm;"></canvas>
+           <canvas id="chart2" width="400" height="400" style="background-color: #181B23; padding: .2cm;"></canvas>
+           <p style="color:#ffffff; ">Sales today  |   Sales this week</p>
+      </div>
+    </center>
+     <script>
+
+     // bar chart data
+     var barData = {
+       labels : [
+
+           "0",
+
+           "1",
+
+           "2",
+
+           "3",
+
+           "4",
+
+           "5",
+
+       ],
+
+       datasets : [{
+         //Colour of the background graph
+         fillColor: "#181B23",
+         strokeColor: "#fe005d",
+         //Individual point colour
+         pointColor: "#b30042",
+         pointStrokeColor: "black",
+         //When the mouse hovers of the points
+         pointHighlightFill: "#fe005d",
+         bezierCurve : true,
+         data : [
+
+             23,
+
+             25.4,
+
+             24,
+
+             25,
+
+             26,
+
+             24.2,
+           ]
+         }
+]
+     }
+
+
+           // bar chart data
+           var barData2 = {
+             labels : [
+
+                 "MON",
+
+                 "TUE",
+
+                 "WED",
+
+                 "THU",
+
+                 "FRI",
+
+                 "SAT",
+
+                 "SUN"
+
+             ],
+
+             datasets : [{
+               //Colour of the background graph
+               fillColor: "#181B23",
+               strokeColor: "#fe005d",
+               //Individual point colour
+               pointColor: "#b30042",
+               pointStrokeColor: "black",
+               //When the mouse hovers of the points
+               pointHighlightFill: "#fe005d",
+               bezierCurve : true,
+               data : [
+
+                   9,
+
+                   30,
+
+                   12,
+
+                   18.9,
+
+                   23,
+
+                   24.2,
+                 ]
+               }
+     	]
+           }
+
+           Chart.defaults.global.animationSteps = 50;
+           Chart.defaults.global.tooltipYPadding = 24;
+           Chart.defaults.global.tooltipXPadding = 24;
+           Chart.defaults.global.tooltipCornerRadius = 0;
+           Chart.defaults.global.tooltipTitleFontStyle = "normal";
+           Chart.defaults.global.tooltipFillColor = "#fe005d";
+           Chart.defaults.global.animationEasing = "easeOutBounce";
+           Chart.defaults.global.responsive = false;
+           Chart.defaults.global.scaleLineColor = "#fe005d";
+           Chart.defaults.global.scaleFontSize = 20;
+
+           // get bar chart canvas
+           var chart1 = document.getElementById("chart1").getContext("2d");
+           var chart2 = document.getElementById("chart2").getContext("2d");
+           steps = 10
+           max = 30
+           // draw bar chart
+           var LineChartDemo = new Chart(chart1).Line(barData, {
+             scaleOverride: true,
+             scaleSteps: steps,
+             scaleStepWidth: Math.ceil(max / steps),
+             scaleStartValue: 0,
+             scaleShowVerticalLines: true,
+             scaleShowGridLines : true,
+             barShowStroke : true,
+             scaleShowLabels: true,
+             bezierCurve: false,
+           });
+
+           var LineChartDemo2 = new Chart(chart2).Line(barData2, {
+             scaleOverride: true,
+             scaleSteps: steps,
+             scaleStepWidth: Math.ceil(max / steps),
+             scaleStartValue: 0,
+             scaleShowVerticalLines: true,
+             scaleShowGridLines : true,
+             barShowStroke : true,
+             scaleShowLabels: true,
+             bezierCurve: false,
+           });
+
+     </script>
+  </body>
+</html>

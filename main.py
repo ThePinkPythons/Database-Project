@@ -32,6 +32,10 @@ from db.sql.connection.singleton import Database
 from orders.handler import create_order_table
 from user.handler import create_users_table
 
+#website
+from website.manage import website
+import threading
+import sys
 
 def build_db(database, table, headers):
     """
@@ -57,7 +61,7 @@ def upload_csv(headers, has_headers):
     write_csv_to_sql(fpath, headers=headers, has_headers=has_headers)
 
 
-if __name__ == "__main__":
+def start_discord():
     # arguments = docopt(__doc__, version='Database Project 0.1')
     # database = arguments.get("--database", "project.db")
     # table = arguments.get("--table", "productdata")
@@ -76,3 +80,19 @@ if __name__ == "__main__":
     create_users_table()
     upload_csv(headers.keys(), has_headers=True)
     discordbot.start()
+
+def start_website():
+    website()
+
+if __name__ == "__main__":
+    start_discord()
+    """
+    threads = []
+    discord_thread = threading.Thread(target=start_discord)
+    discord_thread.daemon = True
+    threads.append(discord_thread)
+    website_thread = threading.Thread(target=start_website)
+    threads.append(website_thread)
+    threads[0].start()
+    """
+    #threads[1].start()
