@@ -27,7 +27,9 @@ Options:
 
 import json
 import logging
+import multiprocessing
 import os
+import subprocess
 import sys
 import threading
 
@@ -114,28 +116,29 @@ if __name__ == "__main__":
     arguments = docopt(__doc__, version='Database Project 0.1')
     logging.info("Database Project 0.1")
     threads = []
-    website_thread = None
+    website_proc = None
     discord_thread = None
+
+    python_path = os.environ.get("PYTHON_PATH", "python")
 
     # create threads
     if arguments.get("--discord_only", False) or arguments.get("--website_only", False) is False:
         logging.info("Creating Discord Thread")
         discord_thread = threading.Thread(target=start_discord, args=(arguments,))
         discord_thread.daemon = True
-    elif arguments.get("--website_only", False) or arguments.get("--discord_only", False) is False:
-        logging.info("Creating Website Thread")
-        website_thread = threading.Thread(target=start_website)
-
-    # start threads
-    logging.info("Starting Threads")
-    if discord_thread:
         discord_thread.start()
-    if website_thread:
-        website_thread.start()
+    elif arguments.get("--website_only", False) or arguments.get("--discord_only", False) is False:
+        if python_path:
+            logging.info("Creating Website Thread")
+            djangopath = os.getcwd()
+            djangopath = os.path.sep.join([djangopath, 'website', 'manage.py'])
+            website_proc = subprocess.Popen([python_path, djangopath, 'runserver'])
+        else:
+            logging.warning("Must Specify a Python Path to Run the Website from this Part of the Application.")
 
     # wait for threads to terminate
     logging.info("Waiting for Threads to Complete")
     if discord_thread:
         discord_thread.join()
-    if website_thread:
-        website_thread.join()
+    if website_proc:
+        logging.info("You Must Manually Kill this Process When Running a Website")
