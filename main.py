@@ -118,13 +118,13 @@ if __name__ == "__main__":
     discord_thread = None
 
     # create threads
-    if arguments.get("--discord_only", False) or arguments.get("--website_only", False):
+    if arguments.get("--discord_only", False) or arguments.get("--website_only", False) is False:
         logging.info("Creating Discord Thread")
         discord_thread = threading.Thread(target=start_discord, args=(arguments,))
         discord_thread.daemon = True
         discord_thread.start()
         discord_thread.join()
-    elif arguments.get("--website_only", False) or arguments.get("--discord_only", False):
+    elif arguments.get("--website_only", False) or arguments.get("--discord_only", False) is False:
         logging.info("Creating Website Thread")
         website_thread = threading.Thread(target=start_website)
         website_thread.start()
