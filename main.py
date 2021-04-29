@@ -122,13 +122,9 @@ if __name__ == "__main__":
         logging.info("Creating Discord Thread")
         discord_thread = threading.Thread(target=start_discord, args=(arguments,))
         discord_thread.daemon = True
-        discord_thread.start()
-        discord_thread.join()
     elif arguments.get("--website_only", False) or arguments.get("--discord_only", False) is False:
         logging.info("Creating Website Thread")
         website_thread = threading.Thread(target=start_website)
-        website_thread.start()
-        website_thread.join()
 
     # start threads
     logging.info("Starting Threads")
