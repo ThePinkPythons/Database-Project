@@ -1,3 +1,4 @@
+from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -15,5 +16,5 @@ def products_by_id(request):
     :param request: The request to process
     :return:    A JSON response containing products and their quantities
     """
-    data = AvailableProducts.objects.raw('SELECT product_id, quantity FROM products')
-    return JsonResponse(list(data), safe=False)
+    data = AvailableProducts.objects.all()
+    return JsonResponse(serializers.serialize(data), safe=False)

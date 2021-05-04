@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dashboard',
+    'rest_framework',
+    'website'
 ]
 
 MIDDLEWARE = [
@@ -72,8 +75,8 @@ WSGI_APPLICATION = 'website.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-path_to_db = os.path.sep.join(os.getcwd().split(os.path.sep)[:-2])
-path_to_db = os.path.sep.join([path_to_db, 'database', 'db.sqlite3'])
+path_to_db = os.path.sep.join(os.getcwd().split(os.path.sep)[:-1])
+path_to_db = os.path.sep.join([path_to_db, 'db.sqlite3'])
 print(path_to_db)
 DATABASES = {
     'default': {
