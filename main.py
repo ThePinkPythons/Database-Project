@@ -84,7 +84,7 @@ def start_discord(arguments):
             headers = {
                 "product_id": "varchar",
                 "quantity": "integer",
-                "wholesale_price": "double precision",
+                "wholesale_cost": "double precision",
                 "sale_price": "double precision",
                 "supplier_id": "varchar"
             }
