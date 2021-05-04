@@ -24,18 +24,28 @@ class GetOrdersView(APIView):
         :param data:    The data to process
         :return:    An appropriate HTTP Response
         """
-        pass
+        order_id = data.get("order_id", None)
+        supplier_id = data.get("supplier_id", None)
+        price = data.get("price", None)
+        message = "An Order Id, Supplier Id, or Price is required"
+        if order_id or supplier_id or price:
+            filters = dict(
+                [(key, val) for key, val in data if "order_id" in key or "supplier_id" in key or "price" in key])
+            qs = AvailableProducts.objects.filter(**filters)
+            return HttpResponse(serializers.serialize('json', list(qs)))
+        return HttpResponse(serializers.serialize('json', {"success": False, "message": message}))
 
     def get(self, request, *args, **kwargs):
         """
-        Get all products
+        Get all products. Returns products from the given data
 
         :param request: Request to process
         :param args:    Arguments
         :param kwargs:  Keyword mapped arguments
         :return:     A JSON response
         """
-        pass
+        data = request.GET
+        return self.get_products(data)
 
     def post(self, request, *args, **kwargs):
         """
@@ -46,7 +56,8 @@ class GetOrdersView(APIView):
         :param kwargs:  Keyword mapped arguments
         :return:     A JSON response
         """
-        pass
+        data = request.POST
+        return self.get_products(data)
 
 
 class CreateOrdersView(APIView):
@@ -67,11 +78,11 @@ class CreateOrdersView(APIView):
         address = data.get("address", None)
         city = data.get("city", None)
         state = data.get("state", None)
-        zip = data.get("zip", None)
+        zip_code = data.get("zip", None)
         status = data.get("status", None)
         message = "Not All Parameters Provided. Check the Documentation"
         if product_id and quantity and author_id and address and city and state \
-                and zip and status:
+                and zip_code and status:
             # create an order id
             order_id = str(uuid.uuid4())
             # check if the order exists

@@ -698,7 +698,7 @@ margin-bottom: 20px;
     var defs = {}
         defs["CreateOrder"] = {
   "type" : "object",
-  "required" : [ "address", "author_id", "city", "order_id", "product_id", "quantity", "state", "zip" ],
+  "required" : [ "address", "author_id", "city", "product_id", "quantity", "state", "zip" ],
   "properties" : {
     "order_id" : {
       "type" : "string",
@@ -2237,7 +2237,7 @@ $(document).ready(function() {
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-GetOrders-getOrdersByGet-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "https://virtserver.swaggerhub.com/Simplr-Insites-LLC/School-Products-API/1.0.0/get-orders?product_id=&supplier_id=&quantity=&quantity_type="</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "https://virtserver.swaggerhub.com/Simplr-Insites-LLC/School-Products-API/1.0.0/get-orders?product_id=&supplier_id=&quantity="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-GetOrders-getOrdersByGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2255,10 +2255,9 @@ public class GetOrdersApiExample {
         GetOrdersApi apiInstance = new GetOrdersApi();
         String productId = productId_example; // String | Order to get
         String supplierId = supplierId_example; // String | Suppler id
-        BigDecimal quantity = 8.14; // BigDecimal | Quantity to check against
-        String quantityType = quantityType_example; // String | Whether greater or less than if necessary as gt or lt when checking quantity
+        BigDecimal quantity = 8.14; // BigDecimal | Quantity to check against. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lte.
         try {
-            Object result = apiInstance.getOrdersByGet(productId, supplierId, quantity, quantityType);
+            Object result = apiInstance.getOrdersByGet(productId, supplierId, quantity);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling GetOrdersApi#getOrdersByGet");
@@ -2277,10 +2276,9 @@ public class GetOrdersApiExample {
         GetOrdersApi apiInstance = new GetOrdersApi();
         String productId = productId_example; // String | Order to get
         String supplierId = supplierId_example; // String | Suppler id
-        BigDecimal quantity = 8.14; // BigDecimal | Quantity to check against
-        String quantityType = quantityType_example; // String | Whether greater or less than if necessary as gt or lt when checking quantity
+        BigDecimal quantity = 8.14; // BigDecimal | Quantity to check against. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lte.
         try {
-            Object result = apiInstance.getOrdersByGet(productId, supplierId, quantity, quantityType);
+            Object result = apiInstance.getOrdersByGet(productId, supplierId, quantity);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling GetOrdersApi#getOrdersByGet");
@@ -2296,8 +2294,7 @@ public class GetOrdersApiExample {
                             <div class="tab-pane" id="examples-GetOrders-getOrdersByGet-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">String *productId = productId_example; // Order to get (optional)
 String *supplierId = supplierId_example; // Suppler id (optional)
-BigDecimal *quantity = 8.14; // Quantity to check against (optional)
-String *quantityType = quantityType_example; // Whether greater or less than if necessary as gt or lt when checking quantity (optional)
+BigDecimal *quantity = 8.14; // Quantity to check against. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lte. (optional)
 
 GetOrdersApi *apiInstance = [[GetOrdersApi alloc] init];
 
@@ -2305,7 +2302,6 @@ GetOrdersApi *apiInstance = [[GetOrdersApi alloc] init];
 [apiInstance getOrdersByGetWith:productId
     supplierId:supplierId
     quantity:quantity
-    quantityType:quantityType
               completionHandler: ^(Object output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -2325,8 +2321,7 @@ var api = new SimpleProductsApi.GetOrdersApi()
 var opts = { 
   'productId': productId_example, // {String} Order to get
   'supplierId': supplierId_example, // {String} Suppler id
-  'quantity': 8.14, // {BigDecimal} Quantity to check against
-  'quantityType': quantityType_example // {String} Whether greater or less than if necessary as gt or lt when checking quantity
+  'quantity': 8.14 // {BigDecimal} Quantity to check against. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lte.
 };
 
 var callback = function(error, data, response) {
@@ -2360,13 +2355,12 @@ namespace Example
             var apiInstance = new GetOrdersApi();
             var productId = productId_example;  // String | Order to get (optional) 
             var supplierId = supplierId_example;  // String | Suppler id (optional) 
-            var quantity = 8.14;  // BigDecimal | Quantity to check against (optional) 
-            var quantityType = quantityType_example;  // String | Whether greater or less than if necessary as gt or lt when checking quantity (optional) 
+            var quantity = 8.14;  // BigDecimal | Quantity to check against. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lte. (optional) 
 
             try
             {
                 // Obtains order information using hte provided filter. Can be sent as a post or a get request.
-                Object result = apiInstance.getOrdersByGet(productId, supplierId, quantity, quantityType);
+                Object result = apiInstance.getOrdersByGet(productId, supplierId, quantity);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2386,11 +2380,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 $api_instance = new Swagger\Client\Api\GetOrdersApi();
 $productId = productId_example; // String | Order to get
 $supplierId = supplierId_example; // String | Suppler id
-$quantity = 8.14; // BigDecimal | Quantity to check against
-$quantityType = quantityType_example; // String | Whether greater or less than if necessary as gt or lt when checking quantity
+$quantity = 8.14; // BigDecimal | Quantity to check against. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lte.
 
 try {
-    $result = $api_instance->getOrdersByGet($productId, $supplierId, $quantity, $quantityType);
+    $result = $api_instance->getOrdersByGet($productId, $supplierId, $quantity);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling GetOrdersApi->getOrdersByGet: ', $e->getMessage(), PHP_EOL;
@@ -2406,11 +2399,10 @@ use WWW::SwaggerClient::GetOrdersApi;
 my $api_instance = WWW::SwaggerClient::GetOrdersApi->new();
 my $productId = productId_example; # String | Order to get
 my $supplierId = supplierId_example; # String | Suppler id
-my $quantity = 8.14; # BigDecimal | Quantity to check against
-my $quantityType = quantityType_example; # String | Whether greater or less than if necessary as gt or lt when checking quantity
+my $quantity = 8.14; # BigDecimal | Quantity to check against. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lte.
 
 eval { 
-    my $result = $api_instance->getOrdersByGet(productId => $productId, supplierId => $supplierId, quantity => $quantity, quantityType => $quantityType);
+    my $result = $api_instance->getOrdersByGet(productId => $productId, supplierId => $supplierId, quantity => $quantity);
     print Dumper($result);
 };
 if ($@) {
@@ -2429,12 +2421,11 @@ from pprint import pprint
 api_instance = swagger_client.GetOrdersApi()
 productId = productId_example # String | Order to get (optional)
 supplierId = supplierId_example # String | Suppler id (optional)
-quantity = 8.14 # BigDecimal | Quantity to check against (optional)
-quantityType = quantityType_example # String | Whether greater or less than if necessary as gt or lt when checking quantity (optional)
+quantity = 8.14 # BigDecimal | Quantity to check against. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lte. (optional)
 
 try: 
     # Obtains order information using hte provided filter. Can be sent as a post or a get request.
-    api_response = api_instance.get_orders_by_get(productId=productId, supplierId=supplierId, quantity=quantity, quantityType=quantityType)
+    api_response = api_instance.get_orders_by_get(productId=productId, supplierId=supplierId, quantity=quantity)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling GetOrdersApi->getOrdersByGet: %s\n" % e)</code></pre>
@@ -2505,27 +2496,7 @@ except ApiException as e:
                 </span>
 
                     <div class="inner description">
-                        Quantity to check against
-                    </div>
-            </div>
-        </div>
-    </div>
-</td>
-</tr>
-
-                                <tr><td style="width:150px;">quantity_type</td>
-<td>
-
-
-    <div id="d2e199_getOrdersByGet_quantityType">
-        <div class="json-schema-view">
-            <div class="primitive">
-                <span class="type">
-                    String
-                </span>
-
-                    <div class="inner description">
-                        Whether greater or less than if necessary as gt or lt when checking quantity
+                        Quantity to check against. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lte.
                     </div>
             </div>
         </div>
@@ -2911,7 +2882,7 @@ $(document).ready(function() {
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-GetProducts-getProductsByGet-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "https://virtserver.swaggerhub.com/Simplr-Insites-LLC/School-Products-API/1.0.0/get-products?order_id="</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "https://virtserver.swaggerhub.com/Simplr-Insites-LLC/School-Products-API/1.0.0/get-products?order_id=&supplier_id=&price="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-GetProducts-getProductsByGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2928,8 +2899,10 @@ public class GetProductsApiExample {
         
         GetProductsApi apiInstance = new GetProductsApi();
         String orderId = orderId_example; // String | ID of the order to cancel
+        String supplierId = supplierId_example; // String | Supplier ID
+        BigDecimal price = 8.14; // BigDecimal | The product price. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lt.
         try {
-            apiInstance.getProductsByGet(orderId);
+            apiInstance.getProductsByGet(orderId, supplierId, price);
         } catch (ApiException e) {
             System.err.println("Exception when calling GetProductsApi#getProductsByGet");
             e.printStackTrace();
@@ -2946,8 +2919,10 @@ public class GetProductsApiExample {
     public static void main(String[] args) {
         GetProductsApi apiInstance = new GetProductsApi();
         String orderId = orderId_example; // String | ID of the order to cancel
+        String supplierId = supplierId_example; // String | Supplier ID
+        BigDecimal price = 8.14; // BigDecimal | The product price. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lt.
         try {
-            apiInstance.getProductsByGet(orderId);
+            apiInstance.getProductsByGet(orderId, supplierId, price);
         } catch (ApiException e) {
             System.err.println("Exception when calling GetProductsApi#getProductsByGet");
             e.printStackTrace();
@@ -2961,11 +2936,15 @@ public class GetProductsApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-GetProducts-getProductsByGet-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">String *orderId = orderId_example; // ID of the order to cancel (optional)
+String *supplierId = supplierId_example; // Supplier ID (optional)
+BigDecimal *price = 8.14; // The product price. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lt. (optional)
 
 GetProductsApi *apiInstance = [[GetProductsApi alloc] init];
 
 // Cancels an order by its order id. Sets the status to cancelled.
 [apiInstance getProductsByGetWith:orderId
+    supplierId:supplierId
+    price:price
               completionHandler: ^(NSError* error) {
                             if (error) {
                                 NSLog(@"Error: %@", error);
@@ -2980,7 +2959,9 @@ GetProductsApi *apiInstance = [[GetProductsApi alloc] init];
 var api = new SimpleProductsApi.GetProductsApi()
 
 var opts = { 
-  'orderId': orderId_example // {String} ID of the order to cancel
+  'orderId': orderId_example, // {String} ID of the order to cancel
+  'supplierId': supplierId_example, // {String} Supplier ID
+  'price': 8.14 // {BigDecimal} The product price. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lt.
 };
 
 var callback = function(error, data, response) {
@@ -3013,11 +2994,13 @@ namespace Example
             
             var apiInstance = new GetProductsApi();
             var orderId = orderId_example;  // String | ID of the order to cancel (optional) 
+            var supplierId = supplierId_example;  // String | Supplier ID (optional) 
+            var price = 8.14;  // BigDecimal | The product price. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lt. (optional) 
 
             try
             {
                 // Cancels an order by its order id. Sets the status to cancelled.
-                apiInstance.getProductsByGet(orderId);
+                apiInstance.getProductsByGet(orderId, supplierId, price);
             }
             catch (Exception e)
             {
@@ -3035,9 +3018,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\Api\GetProductsApi();
 $orderId = orderId_example; // String | ID of the order to cancel
+$supplierId = supplierId_example; // String | Supplier ID
+$price = 8.14; // BigDecimal | The product price. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lt.
 
 try {
-    $api_instance->getProductsByGet($orderId);
+    $api_instance->getProductsByGet($orderId, $supplierId, $price);
 } catch (Exception $e) {
     echo 'Exception when calling GetProductsApi->getProductsByGet: ', $e->getMessage(), PHP_EOL;
 }
@@ -3051,9 +3036,11 @@ use WWW::SwaggerClient::GetProductsApi;
 
 my $api_instance = WWW::SwaggerClient::GetProductsApi->new();
 my $orderId = orderId_example; # String | ID of the order to cancel
+my $supplierId = supplierId_example; # String | Supplier ID
+my $price = 8.14; # BigDecimal | The product price. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lt.
 
 eval { 
-    $api_instance->getProductsByGet(orderId => $orderId);
+    $api_instance->getProductsByGet(orderId => $orderId, supplierId => $supplierId, price => $price);
 };
 if ($@) {
     warn "Exception when calling GetProductsApi->getProductsByGet: $@\n";
@@ -3070,10 +3057,12 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.GetProductsApi()
 orderId = orderId_example # String | ID of the order to cancel (optional)
+supplierId = supplierId_example # String | Supplier ID (optional)
+price = 8.14 # BigDecimal | The product price. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lt. (optional)
 
 try: 
     # Cancels an order by its order id. Sets the status to cancelled.
-    api_instance.get_products_by_get(orderId=orderId)
+    api_instance.get_products_by_get(orderId=orderId, supplierId=supplierId, price=price)
 except ApiException as e:
     print("Exception when calling GetProductsApi->getProductsByGet: %s\n" % e)</code></pre>
                             </div>
@@ -3104,6 +3093,46 @@ except ApiException as e:
 
                     <div class="inner description">
                         ID of the order to cancel
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">supplier_id</td>
+<td>
+
+
+    <div id="d2e199_getProductsByGet_supplierId">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description">
+                        Supplier ID
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">price</td>
+<td>
+
+
+    <div id="d2e199_getProductsByGet_price">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    BigDecimal
+                </span>
+
+                    <div class="inner description">
+                        The product price. Check greater than or less than by using one of the following suffixes __gt, __gte, __lt, __lt.
                     </div>
             </div>
         </div>
