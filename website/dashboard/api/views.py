@@ -43,6 +43,44 @@ class CreateOrdersView(APIView):
     Creates orders
     """
 
+    def process_data(self, data):
+        """
+        Process request data
+
+        :param data:    The data to process
+        :return: The request
+        """
+        order_id = data.get("order_id", None)
+        product_id = data.get("product_id", None)
+        quantity = data.get("quantity", "1")
+        author_id = data.get("author", None)
+        address = data.get("address", None)
+        city = data.get("city", None)
+        state = data.get("state", None)
+        zip = data.get("zip", None)
+        status = data.get("status", None)
+        message = "Not All Parameters Provided. Check the Documentation"
+        if order_id and product_id and quantity and author_id and address and city and state \
+                and zip and status:
+            # check if the order exists
+            data = Order.objects.filter(order_id=order_id)
+            if data.count() == 0:
+                # get the product
+                data = AvailableProducts.objects.filter(product_id=product_id)
+                data_list = list(data)
+                if len(data_list) > 0:
+                    # check the quantity
+                    if data[0]['quantity'] > 0:
+                        # get the price
+                        price = data[0]['price']
+                        total_price = price * float(quantity)
+
+                        # update the quantity
+
+                        # create the order
+                return HttpResponse()
+        return HttpResponse({"Success": False, "Message": message})
+
     def get(self, request, *args, **kwargs):
         """
         Get all products
@@ -59,17 +97,15 @@ class CreateOrdersView(APIView):
 
     def post(self, request, *args, **kwargs):
         """
-        Get all products
+        Creates a product. Requires that all parameters except price be supplied.
 
         :param request: Request to process
         :param args:    Arguments
         :param kwargs:  Keyword mapped arguments
         :return:     A JSON response
         """
-        order_id = request.POST.get("order_id", None)
-        data = Order.objects.filter(order_id=order_id)
-        if data.count() > 0:
-            data.update(status="cancelled")
+        # get required parameters
+        return
 
 
 class CancelOrdersView(APIView):
