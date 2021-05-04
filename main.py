@@ -32,10 +32,11 @@ from db.sql.connection.singleton import Database
 from orders.handler import create_order_table
 from user.handler import create_users_table
 
-#website
+# website
 from website.manage import website
 import threading
 import sys
+
 
 def build_db(database, table, headers):
     """
@@ -81,8 +82,10 @@ def start_discord():
     upload_csv(headers.keys(), has_headers=True)
     discordbot.start()
 
+
 def start_website():
     website()
+
 
 if __name__ == "__main__":
     start_discord()
@@ -95,4 +98,4 @@ if __name__ == "__main__":
     threads.append(website_thread)
     threads[0].start()
     """
-    #threads[1].start()
+    # threads[1].start()
