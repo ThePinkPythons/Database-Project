@@ -41,12 +41,9 @@ class ProductTests(unittest.TestCase):
         """
             Test create order
         """
-        order = []
-        order.append("test_user0")
-        order.append(12345)
-        order.append("product_id")
-        order.append(6789)
-        order.append("test_status")
+        msg = "test_user0,12345,product_id,6789,test_status"
+        order = msg.split(",")
+        
         assert len(order) == 5
 
     def test_get_order(self):
