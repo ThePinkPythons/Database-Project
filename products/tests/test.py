@@ -38,7 +38,19 @@ class ProductTests(unittest.TestCase):
         pass
 
     def test_create_order(self):
-        pass
+
+        order = []
+        name = "test_user0"
+        order_id = 12345
+        product = "product_id"
+        quantity = 6789
+        test_status = "test_status"
+        order.append(test_status)
+        order.insert(quantity)
+        order.insert(product)
+        order.insert(order_id)
+        order.insert(name)
+        assert len(order) == 5
 
     def test_get_order(self):
         """
@@ -63,7 +75,30 @@ class ProductTests(unittest.TestCase):
         assert var[0] == 12345
 
     def test_get_orders(self):
-        pass
+        """
+            Test the get order
+        """
+        mp = {
+            "a": "string",
+            "b": "integer",
+            "c": "varchar",
+            "d": "integer",
+            "e": "string"
+        }
+        db = Database.instance(":memory:", "test_order_table", mp)
+        keys = mp.keys()
+        create = Create("test_order_table", keys)
+        create_records(keys, create,
+                       [{"a": "test_user_0", "b": 12345, "c": "product_id_0", "d": 12, "e": "Accepted"},
+                        {"a": "test_user_1", "b": 67890, "c": "product_id_1", "d": 12, "e": "Cancelled"},
+                        {"a": "test_user_2", "b": 135711, "c": "product_id_2", "d": 12, "e": "Cancelled"},
+                        {"a": "test_user_3", "b": 246810, "c": "product_id_3", "d": 12, "e": "Accepted"}])
+        sel = Select("test_order_table", ["b"])
+        order_ids = []
+        for r in get_record(sel):
+            order_ids.append(r)
+
+        assert len(order_ids) == 4
 
     def test_cancel_order(self):
         """

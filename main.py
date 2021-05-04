@@ -1,5 +1,5 @@
 """
-CS3250 Project. Includes Discord Chat Bot and CSV Reader
+CS3250 Project. Includes Discord Chat Bot and CSV Reader.
 
 Usage:
     main.py [--csv_path=<csv_path>] [--website_only|--discord_only]
