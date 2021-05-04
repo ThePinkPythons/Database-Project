@@ -4,7 +4,8 @@ REST API Views
 
 from dashboard.api.serializers import AvailableProductSerializer
 from dashboard.models import AvailableProducts
-from django.http import JsonResponse
+from django.core import serializers
+from django.http import JsonResponse, HttpResponse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -26,8 +27,18 @@ class AvailableProductsApiView(APIView):
         :param kwargs:  Keyword mapped arguments
         :return:     A JSON response
         """
-        data = AvailableProducts.objects.raw('SELECT * FROM products')
-        return JsonResponse(list(data), safe=False)
+        product_id = request.GET.get("product_id", None)
+        supplier_id = request.GET.get("supplier_id", None)
+        if product_id:
+            if supplier_id:
+                data = AvailableProducts.objects.filter(product_id=product_id, supplier_id=supplier_id)
+            else:
+                data = AvailableProducts.objects.filter(product_id=product_id)
+        elif supplier_id:
+            data = AvailableProducts.objects.filter(supplier_id=supplier_id)
+        else:
+            data = AvailableProducts.objects.all()
+        return HttpResponse(serializers.serialize('json', data))
 
     def post(self, request, *args, **kwargs):
         """
@@ -39,9 +50,18 @@ class AvailableProductsApiView(APIView):
         :param kwargs:  Keyword arguments
         :return:    Product JSON result
         """
-        product_id = request.data.get("product_id")
-        data = AvailableProducts.objects.raw("Select * from products where product_id like '{}'".format(product_id))
-        return JsonResponse(list(data), safe=False)
+        product_id = request.POST.get("product_id", None)
+        supplier_id = request.POST.get("supplier_id", None)
+        if product_id:
+            if supplier_id:
+                data = AvailableProducts.objects.filter(product_id=product_id, supplier_id=supplier_id)
+            else:
+                data = AvailableProducts.objects.filter(product_id=product_id)
+        elif supplier_id:
+            data = AvailableProducts.objects.filter(supplier_id=supplier_id)
+        else:
+            data = AvailableProducts.objects.all()
+        return HttpResponse(serializers.serialize('json', data))
 
 
 class PostProductsApiView(APIView):
