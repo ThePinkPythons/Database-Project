@@ -3,6 +3,7 @@ REST API Views
 """
 
 from dashboard.models import AvailableProducts
+from dashboard.models import Order
 from django.core import serializers
 from django.http import JsonResponse, HttpResponse
 from rest_framework import status
@@ -51,7 +52,24 @@ class CreateOrdersView(APIView):
         :param kwargs:  Keyword mapped arguments
         :return:     A JSON response
         """
-        pass
+        order_id = request.GET.get("order_id", None)
+        data = Order.objects.filter(order_id=order_id)
+        if data.count() > 0:
+            data.update(status="cancelled")
+
+    def post(self, request, *args, **kwargs):
+        """
+        Get all products
+
+        :param request: Request to process
+        :param args:    Arguments
+        :param kwargs:  Keyword mapped arguments
+        :return:     A JSON response
+        """
+        order_id = request.POST.get("order_id", None)
+        data = Order.objects.filter(order_id=order_id)
+        if data.count() > 0:
+            data.update(status="cancelled")
 
 
 class CancelOrdersView(APIView):
@@ -68,7 +86,10 @@ class CancelOrdersView(APIView):
         :param kwargs:  Keyword mapped arguments
         :return:     A JSON response
         """
-        pass
+        order_id = request.GET.get("order_id", None)
+        data = Order.objects.filter(order_id=order_id)
+        if data.count() > 0:
+            data.update(status="cancelled")
 
     def post(self, request, *args, **kwargs):
         """
@@ -80,7 +101,9 @@ class CancelOrdersView(APIView):
         :return:     A JSON response
         """
         order_id = request.POST.get("order_id", None)
-
+        data = Order.objects.filter(order_id=order_id)
+        if data.count() > 0:
+            data.update(status="cancelled")
 
 
 class AvailableProductsApiView(APIView):

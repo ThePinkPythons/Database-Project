@@ -17,6 +17,12 @@ class Order(models.Model):
     zip = models.CharField(max_length=125)
     status = models.CharField(max_length=125)
 
+    def __str__(self):
+        self.order_id
+
+    class Meta:
+        db_table = "orders"
+
 
 class AvailableProducts(models.Model):
     """
