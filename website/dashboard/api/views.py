@@ -1,12 +1,14 @@
 """
 REST API Views
+
+@author Andrew Evans
 """
 import uuid
+
 from dashboard.models import AvailableProducts
 from dashboard.models import Order
 from django.core import serializers
-from django.http import JsonResponse, HttpResponse
-from rest_framework import status
+from django.http import HttpResponse
 from rest_framework.views import APIView
 
 
@@ -14,6 +16,15 @@ class GetOrdersView(APIView):
     """
     Obtains orders
     """
+
+    def get_products(self, data):
+        """
+        Get the products from the requested parameters. Will package an error.
+
+        :param data:    The data to process
+        :return:    An appropriate HTTP Response
+        """
+        pass
 
     def get(self, request, *args, **kwargs):
         """
