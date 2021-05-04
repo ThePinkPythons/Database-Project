@@ -70,9 +70,23 @@ class ProductTests(unittest.TestCase):
             Test cancel order
         """
         mp = {
+            "a": "string",
+            "b": "integer",
+            "c": "varchar",
+            "d": "integer",
             "e": "string"
         }
         _db = Database.instance(":memory:", "test_order_table", mp)
-        up = Update("test_order_table", {"e": "status: Cancelled"})
+        keys = mp.keys()
+        create = Create("test_order_table", keys)
+        create_records(keys, create,
+                       [{"a": "test_user_0", "b": 12345, "c": "product_id_0", "d": 12, "e": "status: Accepted"}])
+
+        up = Update("test_order_table", {"e": "Cancelled"})
         update_record(up)
-        assert (get_record("e").status == 'Cancelled')
+        sel = Select("test_order_table", ["e"])
+        order_status = []
+        for r in get_record(sel):
+            order_status.append(r)
+        var = order_status[0]
+        assert var[0] == "Cancelled"
