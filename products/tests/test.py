@@ -38,18 +38,15 @@ class ProductTests(unittest.TestCase):
         pass
 
     def test_create_order(self):
-
+        """
+            Test create order
+        """
         order = []
-        name = "test_user0"
-        order_id = 12345
-        product = "product_id"
-        quantity = 6789
-        test_status = "test_status"
-        order.append(test_status)
-        order.insert(quantity)
-        order.insert(product)
-        order.insert(order_id)
-        order.insert(name)
+        order.append("test_user0")
+        order.append(12345)
+        order.append("product_id")
+        order.append(6789)
+        order.append("test_status")
         assert len(order) == 5
 
     def test_get_order(self):
