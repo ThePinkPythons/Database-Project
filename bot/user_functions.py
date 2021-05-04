@@ -27,5 +27,3 @@ async def add_user(message):
             '\n !ADD,address,city,state,zip')
 
 
-async def remove_user():
-    pass
