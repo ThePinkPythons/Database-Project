@@ -2,13 +2,85 @@
 REST API Views
 """
 
-from dashboard.api.serializers import AvailableProductSerializer
 from dashboard.models import AvailableProducts
 from django.core import serializers
 from django.http import JsonResponse, HttpResponse
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.views import APIView
+
+
+class GetOrdersView(APIView):
+    """
+    Obtains orders
+    """
+
+    def get(self, request, *args, **kwargs):
+        """
+        Get all products
+
+        :param request: Request to process
+        :param args:    Arguments
+        :param kwargs:  Keyword mapped arguments
+        :return:     A JSON response
+        """
+        pass
+
+    def post(self, request, *args, **kwargs):
+        """
+        Get all products
+
+        :param request: Request to process
+        :param args:    Arguments
+        :param kwargs:  Keyword mapped arguments
+        :return:     A JSON response
+        """
+        pass
+
+
+class CreateOrdersView(APIView):
+    """
+    Creates orders
+    """
+
+    def get(self, request, *args, **kwargs):
+        """
+        Get all products
+
+        :param request: Request to process
+        :param args:    Arguments
+        :param kwargs:  Keyword mapped arguments
+        :return:     A JSON response
+        """
+        pass
+
+
+class CancelOrdersView(APIView):
+    """
+    Cancels orders
+    """
+
+    def get(self, request, *args, **kwargs):
+        """
+        Get all products
+
+        :param request: Request to process
+        :param args:    Arguments
+        :param kwargs:  Keyword mapped arguments
+        :return:     A JSON response
+        """
+        pass
+
+    def post(self, request, *args, **kwargs):
+        """
+        Get all products
+
+        :param request: Request to process
+        :param args:    Arguments
+        :param kwargs:  Keyword mapped arguments
+        :return:     A JSON response
+        """
+        order_id = request.POST.get("order_id", None)
+
 
 
 class AvailableProductsApiView(APIView):
@@ -38,7 +110,7 @@ class AvailableProductsApiView(APIView):
             data = AvailableProducts.objects.filter(supplier_id=supplier_id)
         else:
             data = AvailableProducts.objects.all()
-        return HttpResponse(serializers.serialize('json', data))
+        return HttpResponse(serializers.serialize('json', data), 'application/json')
 
     def post(self, request, *args, **kwargs):
         """
@@ -61,7 +133,7 @@ class AvailableProductsApiView(APIView):
             data = AvailableProducts.objects.filter(supplier_id=supplier_id)
         else:
             data = AvailableProducts.objects.all()
-        return HttpResponse(serializers.serialize('json', data))
+        return HttpResponse(serializers.serialize('json', data), 'application/json')
 
 
 class PostProductsApiView(APIView):
@@ -89,15 +161,24 @@ class PostProductsApiView(APIView):
         :param kwargs:  Mapped keyword
         :return:    JSON response related to the success of the request
         """
-        data = {
-            "product_id": request.data.get("product_id"),
-            "quantity": int(request.data.get("quantity")),
-            "wholesale_price": float(request.get("wholesale_price")),
-            "sale_price": float(request.get("sale_price")),
-            "supplier_id":  request.get("supplier_id")
-        }
-        serializer = AvailableProductSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        product_id = request.POST.get("product_id", None)
+        quantity = request.POST.get("quantity", None)
+        wholesale_price = request.POST.get("wholesale_price", None)
+        sale_price = request.POST.get("sale_price", None)
+        supplier_id = request.POST.get("supplier_id", None)
+        data = AvailableProducts.objects.filter(product_id=product_id)
+        if data.count() > 0:
+            data.update(
+                quantity=quantity,
+                wholesale_price=wholesale_price,
+                sale_price=sale_price,
+                supplier_id=supplier_id)
+        else:
+            object = AvailableProducts(
+                product_id=product_id,
+                quantity=quantity,
+                wholesale_price=wholesale_price,
+                sale_price=sale_price,
+                supplier_id=supplier_id)
+            object.save()
+        return HttpResponse({"Success": True}, 'application/json')
