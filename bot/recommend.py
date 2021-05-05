@@ -20,7 +20,13 @@ async def below(message):
         products = []
         for product in get_record(sel):
             products.append(product[0])
-        msg = "The products below ", below, " are: {}".format(str(products[:10]))
+
+        rand_products = []
+        while rand_products != 10:
+            rand_product_id = random.randint(0, len(products)-1)
+            chosen_random_prod = products[rand_product_id][0]
+            rand_products.append(chosen_random_prod)
+        msg = "The products below ", below, " are: {}".format(str(rand_products))
         await message.channel.send(msg)
     else:
         # Simple help response if the user inputs something other than a digit.
