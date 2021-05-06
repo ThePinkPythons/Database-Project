@@ -92,6 +92,8 @@ def start_discord(arguments):
         create_order_table()
         create_users_table()
         upload_csv(headers.keys(), has_headers=True)
+    else:
+        _db = Database.instance(database)
     discordbot.start()
 
 
