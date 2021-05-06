@@ -42,7 +42,7 @@ from bot import discordbot
 from db.io.manager import write_csv_to_sql, write_csv_from_sql
 from db.sql.connection.singleton import Database
 from orders.handler import create_order_table, ORDER_TABLE_MAPPING
-from products.handler import PRODUCT_MAPPING
+from products.handler import PRODUCT_MAPPING, create_product_table
 from user.handler import create_users_table
 from website.manage import website
 
@@ -112,6 +112,7 @@ def create_tables(csv, create, headers, database, build_tables):
             }
         if build_tables:
             build_db(database, "products", headers)
+            create_product_table()
             create_order_table()
             create_users_table()
         else:
