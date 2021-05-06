@@ -33,6 +33,7 @@ class Database(object):
         :return:    The class instance
         """
         if cls._instance is None:
+            print(database)
             cls._instance = sqlite3.connect(database, timeout=30)
             if mapping and table:
                 sql = get_create_table_statement(table, mapping)

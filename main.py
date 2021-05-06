@@ -74,9 +74,13 @@ def start_discord(arguments):
     :param arguments:   Arguments from docopt
     """
     database = arguments.get("--db", "db.sqlite3")
+    if database is None:
+        database = "db.sqlite3"
     headers = arguments.get("--headers", None)
     csv = arguments.get("--csv_path", None)
-    create = arguments.get("--create", "False")
+    create = arguments.get("--create", "false")
+    if create is None:
+       create = "false"
     if csv and create.lower() == "true":
         if headers:
             headers = json.loads(headers)
