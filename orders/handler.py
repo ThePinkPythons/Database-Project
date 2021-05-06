@@ -1,7 +1,11 @@
 """
 Order class
 """
+
+import datetime
 from uuid import uuid4
+
+from pytz import utc
 
 from db.crud.executor import create_table, create_records, delete_record, get_record, drop_table, update_record
 from db.sql.query.builder import CreateTable, Delete, Create, Select, DropTable, Update
@@ -20,7 +24,8 @@ ORDER_TABLE_MAPPING = {
     "city": "varchar",
     "state": "varchar",
     "zip": "varchar",
-    "status": "varchar"
+    "status": "varchar",
+    "date": "integer"
 }
 
 
@@ -30,7 +35,8 @@ class Order(DatabaseObject):
     setting new product ids repeatedly.
     """
 
-    def __init__(self, author_id, order_id, status="active", address=None, city=None, state=None, zip=None):
+    def __init__(
+            self, author_id, order_id=None, status="active", address=None, city=None, state=None, zip=None, date=None):
         """
         Constructor
 
@@ -41,9 +47,14 @@ class Order(DatabaseObject):
         :param city:    Shipping city
         :param state:   Shipping state
         :param zip:     Shipping zip code
+        :param date:    The date of the order
         """
+
         if address is None and city is None and state is None:
             print("CANNOT CREATE ORDER WITHOUT A CITY STATE OR ADDRESS")
+        if date is None:
+            date = datetime.datetime.now()
+            date = int(date.replace(tzinfo=utc).timestamp())
         self._order = {
             "product_id": None,
             "quantity": None,
@@ -55,8 +66,9 @@ class Order(DatabaseObject):
             "city": city,
             "state": state,
             "zip": zip,
+            "date": date
         }
-    
+
     def product_id(self, product_id):
         """
         Set the product id
@@ -64,7 +76,7 @@ class Order(DatabaseObject):
         :param product_id:  The product uuid
         """
         self._order["product_id"] = product_id
-    
+
     def quantity(self, quantity):
         """
         Set the quantity
@@ -157,7 +169,7 @@ class DeleteOrders(object):
 
         :param product_id:  The product id
         """
-        self.delete.equals("product_id", product_id)
+        self._delete.equals("product_id", product_id)
 
     def by_author_id(self, author_id):
         """
@@ -165,15 +177,14 @@ class DeleteOrders(object):
 
         :param author_id:    The user author_id
         """
-        self.delete.equals("author_id", author_id)
+        self._delete.equals("author_id", author_id)
 
     def delete(self):
         """
         Run the delete
         """
-        delete_record(self.delete)
-        self.delete = Delete("orders")
-
+        delete_record(self._delete)
+        self._delete = Delete("orders")
 
 class GetOrders(object):
 
@@ -194,7 +205,7 @@ class GetOrders(object):
         :param author_id:   The user author_id
         """
         self.select.equals("author_id", author_id)
-    
+
     def with_product_id(self, product_id):
         """
         The product id

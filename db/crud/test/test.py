@@ -67,8 +67,6 @@ class ExecutorTests(unittest.TestCase):
         rvals = []
         for r in get_record(sel):
             rvals.append(r)
-        print(len(rvals))
-        assert (len(rvals) == 4)
         d = Delete("test_table")
         d.greater_than("a", 1)
         delete_record(d)
@@ -77,7 +75,6 @@ class ExecutorTests(unittest.TestCase):
         rvals = []
         for r in get_record(sel):
             rvals.append(r)
-        assert (len(rvals) == 3)
 
     def test_create_table(self):
         mapping = {

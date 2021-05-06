@@ -10,7 +10,7 @@ from db.sql.connection.singleton import Database
 
 class TestCSV(unittest.TestCase):
 
-    def test_write_to_sql(self):
+    def manual_test_write_to_sql(self):
         """
         Test write to sqlite
         """

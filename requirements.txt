@@ -1,12 +1,11 @@
+dateparser
 discord-py
-docopt~=0.6.2
+docopt
 uuid~=1.30
 Django~=3.1.7
 discord~=1.0.1
 django_rest_framework
-<<<<<<< Updated upstream
-requests
-=======
 dashboard~=0.0.6
 djangorestframework~=3.12.4
->>>>>>> Stashed changes
+uuid
+Sphinx
