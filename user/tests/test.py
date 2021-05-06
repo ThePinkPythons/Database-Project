@@ -4,28 +4,6 @@ Tests for the user table interaction
 
 import unittest
 
-
-<<<<<<< HEAD
-class UsersTests(unittest.TestCase):
-
-    def test_create_order_table(self):
-        pass
-
-    def test_create_order_table_does_not_terminate_on_exists(self):
-        pass
-
-    def test_create_order(self):
-        pass
-
-    def test_get_order(self):
-        pass
-
-    def test_get_orders(self):
-        pass
-
-    def test_cancel_order(self):
-        pass
-=======
 from db.sql.connection.singleton import Database
 from user.handler import create_users_table, User, GetUsers, DeleteUser, drop_users_table
 
@@ -106,4 +84,3 @@ class UsersTests(unittest.TestCase):
         except Exception as e:
             print(e)
         drop_users_table()
->>>>>>> discord
