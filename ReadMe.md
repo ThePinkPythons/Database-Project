@@ -10,7 +10,7 @@ The CS3250 project for the Pink Panthers
 
 - Joseph Barrazza
 
-- Roray Oguma
+- Rory Oguma
 
 - Andrew Evans
 

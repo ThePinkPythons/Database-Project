@@ -1,11 +1,11 @@
 """
-Utiltities for the REST API
+Utilities for the REST API
 """
 
 
 def check_str_param(param):
     """
-    Checks to ensure that a string exists and is parseable. Returns None oterhwise.
+    Checks to ensure that a string exists and is parsable. Returns None otherwise.
 
     :param param:   The parameter to parse.
     :return:    A string or None
@@ -26,7 +26,7 @@ def check_str_param(param):
 
 def check_float_param(param):
     """
-    Checks to ensure that a float exists and parseable. Returns None otherwise.
+    Checks to ensure that a float exists and parsable. Returns None otherwise.
 
     :param param:   The parameter to check
     :return:    The parameter value
@@ -47,7 +47,7 @@ def check_float_param(param):
 
 def check_int_param(param):
     """
-    Checks to ensure that a  int exists and is parseable. Returns None otherwise.
+    Checks to ensure that a  int exists and is parsable. Returns None otherwise.
 
     :param param:   The parameter to check
     :return:    The parameter value
