@@ -1,8 +1,10 @@
 """
 User table handler. The UUID for a User is the author_id. User is not reusable.
 """
-from db.crud.executor import create_records, get_record, delete_record, create_table
-from db.sql.query.builder import Create, Select, Delete, CreateTable
+
+from db.crud.executor import create_records, get_record, delete_record, create_table, drop_table
+
+from db.sql.query.builder import Create, Select, Delete, CreateTable, DropTable
 from db.templates.dbobject import DatabaseObject
 
 
@@ -118,7 +120,7 @@ class DeleteUser(object):
         """
         Constructor
         """
-        self.delete = Delete("orders")
+        self._delete = Delete("users")
 
     def by_author_id(self, author_id):
         """
@@ -126,7 +128,7 @@ class DeleteUser(object):
 
         :param author_id:   author_id to delete by
         """
-        self.delete.equals("author_id", author_id)
+        self._delete.equals("author_id", author_id)
 
     def in_city(self, city):
         """
@@ -134,7 +136,7 @@ class DeleteUser(object):
 
         :param city:   The city
         """
-        self.delete.equals("city", city)
+        self._delete.equals("city", city)
 
     def in_state(self, state):
         """
@@ -142,7 +144,7 @@ class DeleteUser(object):
 
         :param state:   The state
         """
-        self.delete.equals("state", state)
+        self._delete.equals("state", state)
 
     def in_zip(self, zip):
         """
@@ -150,14 +152,14 @@ class DeleteUser(object):
 
         :param zip:   The zip code
         """
-        self.delete.equals("zip", zip)
+        self._delete.equals("zip", zip)
 
     def delete(self):
         """
         Delete the record
         """
-        delete_record(self.delete)
-        self.delete = Delete("users")
+        delete_record(self._delete)
+        self._delete = Delete("users")
 
 
 def create_users_table():
@@ -166,3 +168,11 @@ def create_users_table():
     """
     query = CreateTable("users", USER_TABLE_MAPPING)
     create_table(query)
+
+
+def drop_users_table():
+    """
+    Drops the users table
+    """
+    query = DropTable("users")
+    drop_table(query)

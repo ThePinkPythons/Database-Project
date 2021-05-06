@@ -16,7 +16,7 @@ def create_records(keys, query, batch):
     """
     db = Database.instance(None)
     query = str(query)
-    data = [tuple([record[x] for x in keys]) for record in batch]
+    data = [tuple([record[x] for x in record.keys()]) for record in batch]
     c = db.cursor()
     c.executemany(query, data)
     db.commit()

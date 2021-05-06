@@ -9,7 +9,14 @@ from db.sql.connection.singleton import Database
 from db.sql.query.builder import Select, Create
 
 
-def write_csv_to_sql(filepath, db=":memory:", table="products", headers=None, has_headers=False, table_mappings=None, batch_size=100):
+def write_csv_to_sql(
+        filepath,
+        db=":memory:",
+        table="products",
+        headers=None,
+        has_headers=False,
+        table_mappings=None,
+        batch_size=100):
     """
     Writes a given CSV to a table
 
@@ -40,7 +47,10 @@ def write_csv_to_sql(filepath, db=":memory:", table="products", headers=None, ha
             if len(batch) > 0:
                 if has_headers:
                     record = batch[0]
-                    headers = record.keys()
+                    if csv_headers is None:
+                        headers = record.keys()
+                    else:
+                        csv_headers = headers
                 query = Create(table, headers)
                 create_records(headers, query, batch)
     finally:

@@ -16,6 +16,7 @@ class Order(models.Model):
     state = models.CharField(max_length=125)
     zip = models.CharField(max_length=125)
     status = models.CharField(max_length=125)
+    date = models.IntegerField()
 
     def __str__(self):
         self.order_id
