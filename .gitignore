@@ -4,7 +4,7 @@ code.txt
 __pycache__
 __init__.py
 productdata
-*.db
+db.sql*
 venv
 .DS_Store
 data/product_data.csv
