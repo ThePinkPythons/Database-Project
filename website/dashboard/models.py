@@ -7,7 +7,7 @@ class Order(models.Model):
     """
     order_id = models.CharField(max_length=125, primary_key=True)
     product_id = models.CharField(max_length=125)
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=0)
     price = models.DecimalField(decimal_places=2, max_digits=8)
     total = models.DecimalField(decimal_places=2, max_digits=8)
     author_id = models.CharField(max_length=125)
@@ -16,7 +16,7 @@ class Order(models.Model):
     state = models.CharField(max_length=125)
     zip = models.CharField(max_length=125)
     status = models.CharField(max_length=125)
-    date = models.IntegerField()
+    date = models.IntegerField(default=0)
 
     def __str__(self):
         self.order_id
