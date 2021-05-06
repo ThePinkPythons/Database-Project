@@ -20,11 +20,12 @@ async def below(message):
         products = []
         for product in get_record(sel):
             products.append(product[0])
-        msg = "The products below ", below, " are: {}".format(str(products[:10]))
-        await message.channel.send(msg)
+            recommend = products[:50]
+        msg = "The products below ", below, " are: {}".format(str(random.sample(products, 10)))
+        await message.author.send(msg)
     else:
         # Simple help response if the user inputs something other than a digit.
-        await message.channel.send(
+        await message.author.send(
             'Please type a integer after !BELOW'
             '\n Example !BELOW20'
             '\n this will return the first ten items below $20')
@@ -41,7 +42,7 @@ async def recommend(message):
     db_length = len(rand_prods)
     while len(products) != 5:
         rand_prodid = random.randint(0, db_length - 1)
-    
+
         chosen_prodid = rand_prods[rand_prodid][0]
         products.append(chosen_prodid)
         print(chosen_prodid)
@@ -53,7 +54,7 @@ async def recommend(message):
     # TODO:
     """
         If statement checks if the user has ordered anything before the recommend
-        five items. If not recommend five random items from product list. 
+        five items. If not recommend five random items from product list.
     """
     # for product in get_record(sel):
     #    products.append(product[0])
