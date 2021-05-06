@@ -71,7 +71,7 @@ class ReadCSVDataFromFile(APIView):
         :param args:    Arguments
         return: JSON response
         """
-        return HttpResponse(json.dumps(ReadCSVDataFromFile.sort()))
+        return HttpResponse(json.dumps(ReadCSVDataFromFile.sort()),'application/json')
 
 class CreateOrdersView(APIView):
     """
