@@ -1,12 +1,52 @@
 """
 Entry point utilities for reading db and storing in sql
 """
+import dateparser
 
 from db.crud.executor import create_records
 from db.io.sink import CSVSink
 from db.io.source import CSVSource
 from db.sql.connection.singleton import Database
 from db.sql.query.builder import Select, Create
+
+
+def prepare_batch(batch, mappings):
+    """
+    Prepare the batch. Make necessary alterations to data.
+
+    Field mappings have the form
+     {
+        "product_id": "varchar",
+        "cost": "double",
+        "quantity": "integer",
+        "date": "utc"
+    }
+
+    UTC forces a string to a UTC integer timestamp.
+
+    :param batch:   The batch to transform
+    :param mappings:    Mappings to enforce
+    :return: Prepared batch
+    """
+    out_batch = []
+    keys = mappings.keys()
+    for record in batch:
+        for key in keys:
+            data_type = mappings[key]
+            data_val = record.get(key, None)
+            if data_val:
+                if isinstance(data_val, str) \
+                        and data_type == "utc":
+                    try:
+                        data_val = dateparser.parse(data_val)
+                        if data_val:
+                            record[key] = data_val.timestamp()
+                        else:
+                            record[key] = None
+                    except Exception as e:
+                        record[key] = None
+        out_batch.append(record)
+    return out_batch
 
 
 def write_csv_to_sql(
@@ -16,7 +56,8 @@ def write_csv_to_sql(
         headers=None,
         has_headers=False,
         table_mappings=None,
-        batch_size=100):
+        batch_size=100,
+        csv_mappings=None):
     """
     Writes a given CSV to a table
 
@@ -34,6 +75,7 @@ def write_csv_to_sql(
     :param has_headers: The headers
     :param table_mappings:  Table mappings for creation or None to avoid table creation
     :param batch_size:  Number of records per batch
+    :param csv_mappings: If present, forces the mappings to conform
     """
     _conn = Database.instance(db, table, table_mappings)
     csv_headers = None
@@ -44,6 +86,7 @@ def write_csv_to_sql(
     csv = CSVSource(filepath, headers=csv_headers, has_headers=has_headers, batch_size=batch_size)
     try:
         for batch in csv:
+
             if len(batch) > 0:
                 if has_headers:
                     record = batch[0]
@@ -52,6 +95,8 @@ def write_csv_to_sql(
                     else:
                         csv_headers = headers
                 query = Create(table, headers)
+                if csv_mappings:
+                    batch = prepare_batch(batch, csv_mappings)
                 create_records(headers, query, batch)
     finally:
         csv.close()

@@ -57,16 +57,20 @@ def build_db(database, table, headers):
     Database.instance(database, table, headers)
 
 
-def upload_csv(headers, has_headers):
+def upload_csv(file, headers, table, has_headers, csv_mappings=None):
     """
     Upload the CSV file
 
+    :param file:    Name of the file to upload
     :param headers: Any headers
+    :param table: Table to write to
     :param has_headers: Whether there are headers in the csv
+    :param csv_mappings:    Optional mappings for ETL
     """
     fpath = os.getcwd()
-    fpath = os.path.sep.join([fpath, "productdata", "product_data.csv"])
-    write_csv_to_sql(fpath, headers=headers, has_headers=has_headers)
+    fpath = os.path.sep.join([fpath, "productdata", file])
+    write_csv_to_sql(
+        fpath, table=table, headers=headers, has_headers=has_headers, csv_mappings=csv_mappings)
 
 
 def start_discord(arguments):
@@ -80,10 +84,16 @@ def start_discord(arguments):
     if database is None:
         database = "db.sqlite3"
     headers = arguments.get("--headers", None)
+    build_tables = False
     csv = arguments.get("--csv_path", None)
     create = arguments.get("--create", "False")
-    if create:
-        create = "False"
+    if create is None:
+        if csv:
+            create = "true"
+        else:
+            create = "False"
+    else:
+        build_tables = True
 
     if write_tables:
         try:
@@ -118,20 +128,38 @@ def start_discord(arguments):
             if headers:
                 headers = json.loads(headers)
             else:
-                headers = {
+                product_headers = {
                     "product_id": "varchar",
                     "quantity": "integer",
-                    "wholesale_cost": "double precision",
+                    "wholesale_price": "double precision",
                     "sale_price": "double precision",
                     "supplier_id": "varchar"
                 }
-            build_db(database, "products", headers)
-            create_order_table()
-            create_users_table()
-            upload_csv(headers.keys(), has_headers=True)
+                order_headers = {
+                    "date": "integer",
+                    "author_id": "varchar",
+                    "zip": "varchar",
+                    "product_id": "varchar",
+                    "quantity": "integer"
+                }
+                order_mappings = {
+                    "date": "utc",
+                    "author_id": "varchar",
+                    "zip": "varchar",
+                    "product_id": "varchar",
+                    "quantity": "integer"
+                }
+            if build_tables:
+                build_db(database, "products", headers)
+                create_order_table()
+                create_users_table()
+            else:
+                _db = Database.instance(database)
+            upload_csv("product_data.csv", product_headers.keys(), table="products", has_headers=True)
+            upload_csv("order_data.csv", order_headers.keys(), table="orders", has_headers=True, csv_mappings=order_mappings)
         else:
             _db = Database.instance(database)
-        discordbot.start()
+        #discordbot.start()
 
 
 def start_website():
