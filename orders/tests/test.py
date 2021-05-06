@@ -5,7 +5,8 @@ Tests for the table
 import unittest
 
 from db.sql.connection.singleton import Database
-from orders.handler import CancelOrder, Order, ORDER_TABLE_MAPPING, GetOrders, create_order_table, DeleteOrdersByUser
+from orders.handler import CancelOrder, Order, ORDER_TABLE_MAPPING, GetOrders, create_order_table, DeleteOrdersByUser, \
+    drop_order_table
 
 
 class OrderTests(unittest.TestCase):
@@ -100,3 +101,11 @@ class OrderTests(unittest.TestCase):
         print(orders)
         assert len(orders) == 1
         assert orders[0].get("status", "NE") == "cancelled"
+
+    def test_dop_orders(self):
+        """
+        Test drop the orders table
+        """
+        _db = Database.instance(":memory:")
+        create_order_table()
+        drop_order_table()

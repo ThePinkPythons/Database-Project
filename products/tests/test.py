@@ -7,7 +7,7 @@ import unittest
 from db.crud.executor import create_records, get_record, update_record
 from db.sql.connection.singleton import Database
 from db.sql.query.builder import Create, Select, Update
-from products.handler import create_product_table, Product, GetProduct, DeleteProduct, UpdateProduct
+from products.handler import create_product_table, Product, GetProduct, DeleteProduct, UpdateProduct, drop_product_table
 
 
 class ProductTests(unittest.TestCase):
@@ -101,3 +101,11 @@ class ProductTests(unittest.TestCase):
         print(products)
         assert len(products) == 1
         assert products[0].get("quantity", 0) == 100
+
+    def test_drop_products_table(self):
+        """
+        Test drop the products table
+        """
+        _db = Database.instance(":memory:")
+        create_product_table()
+        drop_product_table()

@@ -5,7 +5,7 @@ Tests for the user table interaction
 import unittest
 
 from db.sql.connection.singleton import Database
-from user.handler import create_users_table, User, GetUsers, DeleteUser
+from user.handler import create_users_table, User, GetUsers, DeleteUser, drop_users_table
 
 
 class UsersTests(unittest.TestCase):
@@ -61,3 +61,11 @@ class UsersTests(unittest.TestCase):
         users = user.query()
         print(users)
         assert len(users) == 0
+
+    def test_drop_users_table(self):
+        """
+        Test drop the user table
+        """
+        _db = Database.instance(":memory:")
+        create_users_table()
+        drop_users_table()

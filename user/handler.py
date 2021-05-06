@@ -1,8 +1,8 @@
 """
 User table handler. The UUID for a User is the author_id. User is not reusable.
 """
-from db.crud.executor import create_records, get_record, delete_record, create_table
-from db.sql.query.builder import Create, Select, Delete, CreateTable
+from db.crud.executor import create_records, get_record, delete_record, create_table, drop_table
+from db.sql.query.builder import Create, Select, Delete, CreateTable, DropTable
 from db.templates.dbobject import DatabaseObject
 
 
@@ -166,3 +166,11 @@ def create_users_table():
     """
     query = CreateTable("users", USER_TABLE_MAPPING)
     create_table(query)
+
+
+def drop_users_table():
+    """
+    Drops the users table
+    """
+    query = DropTable("users")
+    drop_table(query)
