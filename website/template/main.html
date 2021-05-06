@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
     <!--This will automatically refresh the site. For debugging set to 10 instead of 30-->
-    <meta http-equiv="refresh" content="25">
+    <meta http-equiv="refresh" content="200">
     <title>Website stats</title>
     <link rel="shortcut icon" type="image/png" href="https://avatars.githubusercontent.com/u/78450133?s=400&u=2e94e64cc386d74abad25f0be82f08533b695629&v=4"/>
   </head>
@@ -169,5 +169,68 @@
            });
 
      </script>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+     <div class="row">
+         <div class="col-md-6">
+            <canvas id="myChartBar" width="400" height="400" style="background-color: #181B23; padding: .2cm;"></canvas>
+         </div>
+<script>
+  var endpoint = 'http://localhost:8000/dashboard/api/from-csv';
+  $.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data) {
+      drawBarGraph(data, 'myChartBar');
+      console.log("drawing");
+    },
+    error: function(error_data) {
+      console.log(error_data);
+    }
+  })
+
+  function drawBarGraph(data, id) {
+    var labels = data.labels;
+    var chartLabel = data.chartLabel;
+    var chartdata = data.chartdata;
+    var ctx = document.getElementById(id).getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: chartLabel,
+          data: chartdata,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+  }
+</script>
   </body>
 </html>
