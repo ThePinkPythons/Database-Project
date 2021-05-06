@@ -4,6 +4,7 @@ Tests for the user table interaction
 
 import unittest
 
+
 from db.sql.connection.singleton import Database
 from user.handler import create_users_table, User, GetUsers, DeleteUser, drop_users_table
 

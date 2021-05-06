@@ -1,6 +1,7 @@
 """
 Order class
 """
+
 import datetime
 from uuid import uuid4
 
@@ -48,6 +49,7 @@ class Order(DatabaseObject):
         :param zip:     Shipping zip code
         :param date:    The date of the order
         """
+
         if address is None and city is None and state is None:
             print("CANNOT CREATE ORDER WITHOUT A CITY STATE OR ADDRESS")
         if date is None:
@@ -183,7 +185,6 @@ class DeleteOrders(object):
         """
         delete_record(self._delete)
         self._delete = Delete("orders")
-
 
 class GetOrders(object):
 

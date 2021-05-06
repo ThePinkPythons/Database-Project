@@ -84,6 +84,7 @@ def start_discord(arguments):
     create = arguments.get("--create", "False")
     if create:
         create = "False"
+
     if write_tables:
         try:
             if os.path.exists(write_tables):
