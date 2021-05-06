@@ -27,7 +27,6 @@ class OrderTests(unittest.TestCase):
         order = records[0]
         assert order["status"] == "cancelled"
 
-
     def test_create_order_table(self):
         pass
 
