@@ -3,6 +3,7 @@ REST API Views
 
 @author Andrew Evans
 """
+import json
 import uuid
 
 from dashboard.models import AvailableProducts
@@ -17,23 +18,27 @@ class GetOrdersView(APIView):
     Obtains orders
     """
 
-    def get_products(self, data):
+    def get_orders(self, data):
         """
-        Get the products from the requested parameters. Will package an error.
+        Get the orders from the requested parameters. Will package an error.
 
         :param data:    The data to process
         :return:    An appropriate HTTP Response
         """
-        order_id = data.get("order_id", None)
-        supplier_id = data.get("supplier_id", None)
-        price = data.get("price", None)
         message = "An Order Id, Supplier Id, or Price is required"
-        if order_id or supplier_id or price:
-            filters = dict(
-                [(key, val) for key, val in data if "order_id" in key or "supplier_id" in key or "price" in key])
-            qs = AvailableProducts.objects.filter(**filters)
-            return HttpResponse(serializers.serialize('json', list(qs)))
-        return HttpResponse(serializers.serialize('json', {"success": False, "message": message}))
+        filters = dict(
+            [
+                (key, val[0]) for key, val
+                in dict(data).items()
+                if "order_id" in key
+                   or "author_id" in key
+                   or "price" in key
+                   or "product_id" in key
+                   or "status" in key])
+        if len(filters) > 0:
+            qs = Order.objects.filter(**filters)
+            return HttpResponse(serializers.serialize('json', list(qs)), 'application/json')
+        return HttpResponse(json.dumps({"success": False, "message": message}), 'application/json')
 
     def get(self, request, *args, **kwargs):
         """
@@ -45,7 +50,7 @@ class GetOrdersView(APIView):
         :return:     A JSON response
         """
         data = request.GET
-        return self.get_products(data)
+        return self.get_orders(data)
 
     def post(self, request, *args, **kwargs):
         """
@@ -57,7 +62,7 @@ class GetOrdersView(APIView):
         :return:     A JSON response
         """
         data = request.POST
-        return self.get_products(data)
+        return self.get_orders(data)
 
 
 class CreateOrdersView(APIView):
@@ -93,16 +98,17 @@ class CreateOrdersView(APIView):
                 data_list = list(data)
                 if len(data_list) > 0:
                     # check the quantity
-                    if data[0]['quantity'] > 0:
+                    data = data.first()
+                    if data.quantity > 0:
                         # get the price
-                        item_price = data[0]['price']
-                        item_quantity = data[0]['quantity']
+                        item_price = data.sale_price
+                        item_quantity = data.quantity
                         if item_price and item_quantity:
                             total_price = float(item_price) * float(quantity)
-                            new_quantity = item_quantity - quantity
+                            new_quantity = int(item_quantity) - int(quantity)
 
                             # update the quantity
-                            data.update(quantity=new_quantity)
+                            AvailableProducts.objects.filter(product_id=product_id).update(quantity=new_quantity)
 
                             # create the order
                             order = Order(
@@ -115,12 +121,12 @@ class CreateOrdersView(APIView):
                                 address=address,
                                 city=city,
                                 state=state,
-                                zip=zip,
+                                zip=zip_code,
                                 status=status)
                             order.save()
 
                             # return order
-                            return HttpResponse(serializers.serialize('json', order), 'application/json')
+                            return HttpResponse(serializers.serialize('json', [order]), 'application/json')
                         else:
                             message = "Item Price and Item Quantity Not Found in Database"
                     else:
@@ -129,7 +135,7 @@ class CreateOrdersView(APIView):
                     message = "Product ID Not Found in Database"
             else:
                 message = "Order ID Already In Database"
-        response = HttpResponse(serializers.serialize('json', {"Success": False, "Message": message}))
+        response = HttpResponse(json.dumps({"Success": False, "Message": message}), 'application/json')
         response.status_code = 500
         return response
 
@@ -175,11 +181,20 @@ class CancelOrdersView(APIView):
         if order_id is not None:
             data = Order.objects.filter(order_id=order_id)
             if data.count() > 0:
-                data.update(status="cancelled")
-                return HttpResponse(serializers.serialize('json', {"success": True}))
+                data = data.first()
+                product_id = data.product_id
+                quantity = data.quantity
+                Order.objects.filter(order_id=order_id).update(status="cancelled")
+                product = AvailableProducts.objects.filter(product_id=product_id)
+                if product.count() > 0:
+                    product = product.first()
+                    old_quantity = product.quantity
+                    new_quantity = int(old_quantity) + int(quantity)
+                    AvailableProducts.objects.filter(product_id=product_id).update(quantity=new_quantity)
+                return HttpResponse(json.dumps({"success": True}), 'application/json')
             else:
                 message = "Order Does Not Exist"
-        return HttpResponse(serializers.serialize('json', {"success": False, "message": message}))
+        return HttpResponse(json.dumps({"success": False, "message": message}), 'application/json')
 
     def get(self, request, *args, **kwargs):
         """
@@ -190,7 +205,7 @@ class CancelOrdersView(APIView):
         :param kwargs:  Keyword mapped arguments
         :return:     A JSON response
         """
-        data = request.GET.get("order_id", None)
+        data = request.GET
         return self.cancel_order(data)
 
 
@@ -203,7 +218,7 @@ class CancelOrdersView(APIView):
         :param kwargs:  Keyword mapped arguments
         :return:     A JSON response
         """
-        data = request.POST.get("order_id", None)
+        data = request.POST
         return self.cancel_order(data)
 
 
