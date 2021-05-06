@@ -45,13 +45,17 @@ class ReadCSVDataFromFile(APIView):
     2:{"date":"","cust_email":"bia@gmail.com","product_id":"UUFK84M22NOL", "product_quantity":9}
     }
 
+    
+
     def sort():
         """
         Function used to read nested dict data. Then convert it into one dict
         Containing the product_id and product_quantity
         """
         list = []
-        output = {}
+        output_count = []
+        output_product_data = []
+        output = []
         for i in range (len(ReadCSVDataFromFile.data)):
             for j in range(ReadCSVDataFromFile.data[i]['product_quantity']):
                 list.append(ReadCSVDataFromFile.data[i]['product_id'])
@@ -59,9 +63,12 @@ class ReadCSVDataFromFile(APIView):
             if(len(list) == 0):
                 break
             count = list.count(list[0])
-            output[list[0]] = count
+            output_count.append(count)
+            output_product_data.append(list[0])
             for i in range (count):
                 list.pop(0)
+        output.append(output_product_data)
+        output.append(output_count)
         return output
 
     def get(self,request):
