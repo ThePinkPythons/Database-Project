@@ -53,7 +53,7 @@ class UpdateProduct(object):
 
     def __init__(self):
         self._mapping = {}
-        self.update = Update("products", None)
+        self._update = Update("products", None)
 
     def set_quantity(self, quantity):
         """
@@ -83,11 +83,11 @@ class UpdateProduct(object):
         """
         Perform the update
         """
-        if len(self._mapping.keys) == 0:
+        if len(self._mapping.keys()) == 0:
             raise ValueError("No Update Keys Set")
-        self.update.set_mapping(self._mapping)
-        update_record(self.update)
-        self.update = Update("products")
+        self._update.set_mapping(self._mapping)
+        update_record(self._update)
+        self._update = Update("products", {})
 
 
 class GetProduct(object):
@@ -158,7 +158,7 @@ class DeleteProduct(object):
         """
         Delete a product
         """
-        self.delete = Delete("products")
+        self._delete = Delete("products")
 
     def with_product_id(self, product_id):
         """
@@ -166,14 +166,14 @@ class DeleteProduct(object):
 
         :param product_id:  The product id
         """
-        self.delete.equals("product_id", product_id)
+        self._delete.equals("product_id", product_id)
 
     def delete(self):
         """
         Run the delete
         """
-        delete_record(self.delete)
-        self.delete = Delete("orders")
+        delete_record(self._delete)
+        self._delete = Delete("products")
 
 
 def create_product_table():
