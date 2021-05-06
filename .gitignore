@@ -8,3 +8,4 @@ productdata
 venv
 .DS_Store
 data/product_data.csv
+product_data.csv
