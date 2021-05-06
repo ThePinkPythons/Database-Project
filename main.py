@@ -13,6 +13,7 @@ Usage:
     main.py [--csv_path=<csv_path>] [--headers=<headers>] [--table=<table>] [--db=<db>] [--create=<create>]
     main.py [--csv_path=<csv_path>] [--table=<table>] [--headers=<headers>] [--db=<db>] [--create=<create>]
     main.py [--csv_path=<csv_path>] [--table=<table>] [--db=<db>] [--headers=<headers>] [--create=<create>]
+    main.py [--write_csv=<out_path>] [--db=<db>]
 
 Options:
   -h --help                Show this screen.
@@ -23,11 +24,11 @@ Options:
   --csv_path=<csv_path>    Path to the product data csv for initializing the database
   --website_only           Start only the analytics website
   --discord_only           Only start the discord app
+  --write_csv=<out_dir>    Tells the program to simply write out the sqllite3 database to csvs in the output folder.
 """
-
+import datetime
 import json
 import logging
-import multiprocessing
 import os
 import subprocess
 import sys
@@ -36,9 +37,10 @@ import threading
 from docopt import docopt
 
 from bot import discordbot
-from db.io.manager import write_csv_to_sql
+from db.io.manager import write_csv_to_sql, write_csv_from_sql
 from db.sql.connection.singleton import Database
-from orders.handler import create_order_table
+from orders.handler import create_order_table, ORDER_TABLE_MAPPING
+from products.handler import PRODUCT_MAPPING
 from user.handler import create_users_table
 from website.manage import website
 
@@ -74,6 +76,7 @@ def start_discord(arguments):
     :param arguments:   Arguments from docopt
     """
     database = arguments.get("--db", "db.sqlite3")
+    write_tables = arguments.get("--write_csv", None)
     if database is None:
         database = "db.sqlite3"
     headers = arguments.get("--headers", None)
@@ -81,24 +84,53 @@ def start_discord(arguments):
     create = arguments.get("--create", "False")
     if create:
         create = "False"
-    if csv and create.lower() == "true":
-        if headers:
-            headers = json.loads(headers)
-        else:
-            headers = {
-                "product_id": "varchar",
-                "quantity": "integer",
-                "wholesale_cost": "double precision",
-                "sale_price": "double precision",
-                "supplier_id": "varchar"
-            }
-        build_db(database, "products", headers)
-        create_order_table()
-        create_users_table()
-        upload_csv(headers.keys(), has_headers=True)
+    if write_tables:
+        try:
+            if os.path.exists(write_tables):
+                # start database
+                db = Database.instance(database)
+
+                # get headers
+                order_headers = ORDER_TABLE_MAPPING.keys()
+                product_headers = PRODUCT_MAPPING.keys()
+
+                # order path
+                order_path = "orders_{}.csv".format(str(datetime.datetime.now().timestamp()))
+                order_path = os.path.sep.join([write_tables, order_path])
+
+                # product path
+                product_path = "product_{}.csv".format(str(datetime.datetime.now().timestamp()))
+                product_path = os.path.sep.join([write_tables, product_path])
+
+                # write orders
+                write_csv_from_sql(db, order_headers, order_path, "orders")
+
+                # write csv
+                write_csv_from_sql(db, product_headers, product_path, "products")
+            else:
+                raise FileNotFoundError("DIRECTORY NOT FOUND ERROR: {}".format(write_tables))
+        except Exception as e:
+            print("ERROR: You May Need to Instantiate Your Database")
+            raise e
     else:
-        _db = Database.instance(database)
-    discordbot.start()
+        if csv and create.lower() == "true":
+            if headers:
+                headers = json.loads(headers)
+            else:
+                headers = {
+                    "product_id": "varchar",
+                    "quantity": "integer",
+                    "wholesale_cost": "double precision",
+                    "sale_price": "double precision",
+                    "supplier_id": "varchar"
+                }
+            build_db(database, "products", headers)
+            create_order_table()
+            create_users_table()
+            upload_csv(headers.keys(), has_headers=True)
+        else:
+            _db = Database.instance(database)
+        discordbot.start()
 
 
 def start_website():
