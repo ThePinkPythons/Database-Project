@@ -68,7 +68,7 @@ class Order(DatabaseObject):
             "zip": zip,
             "date": date
         }
-    
+
     def product_id(self, product_id):
         """
         Set the product id
@@ -76,7 +76,7 @@ class Order(DatabaseObject):
         :param product_id:  The product uuid
         """
         self._order["product_id"] = product_id
-    
+
     def quantity(self, quantity):
         """
         Set the quantity
@@ -205,7 +205,7 @@ class GetOrders(object):
         :param author_id:   The user author_id
         """
         self.select.equals("author_id", author_id)
-    
+
     def with_product_id(self, product_id):
         """
         The product id

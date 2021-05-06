@@ -4,7 +4,12 @@ code.txt
 __pycache__
 __init__.py
 productdata
+<<<<<<< HEAD
+db.sql*
+=======
 db.sqlite3
+>>>>>>> discord
 venv
 .DS_Store
 data/product_data.csv
+product_data.csv

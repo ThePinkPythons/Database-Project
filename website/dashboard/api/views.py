@@ -11,7 +11,8 @@ from dashboard.models import Order
 from django.core import serializers
 from django.http import HttpResponse
 from rest_framework.views import APIView
-
+#Change to use json from django
+import json
 
 class GetOrdersView(APIView):
     """
@@ -64,6 +65,47 @@ class GetOrdersView(APIView):
         data = request.POST
         return self.get_orders(data)
 
+class ReadCSVDataFromFile(APIView):
+    data  = {
+    0:{"date":"","cust_email":"bia@gmail.com","product_id":"6CSX2YDY0IQM", "product_quantity":4},
+    1:{"date":"","cust_email":"bia@gmail.com","product_id":"D1ILW1BNLNN7", "product_quantity":4},
+    2:{"date":"","cust_email":"bia@gmail.com","product_id":"UUFK84M22NOL", "product_quantity":9}
+    }
+
+    
+
+    def sort():
+        """
+        Function used to read nested dict data. Then convert it into one dict
+        Containing the product_id and product_quantity
+        """
+        list = []
+        output_count = []
+        output_product_data = []
+        output = []
+        for i in range (len(ReadCSVDataFromFile.data)):
+            for j in range(ReadCSVDataFromFile.data[i]['product_quantity']):
+                list.append(ReadCSVDataFromFile.data[i]['product_id'])
+        while(True):
+            if(len(list) == 0):
+                break
+            count = list.count(list[0])
+            output_count.append(count)
+            output_product_data.append(list[0])
+            for i in range (count):
+                list.pop(0)
+        output.append(output_product_data)
+        output.append(output_count)
+        return output
+
+    def get(self,request):
+        """
+        Get all products from CSV
+        :param request: Request to process
+        :param args:    Arguments
+        return: JSON response
+        """
+        return HttpResponse(json.dumps(ReadCSVDataFromFile.sort()),'application/json')
 
 class CreateOrdersView(APIView):
     """

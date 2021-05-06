@@ -120,7 +120,11 @@ class DeleteUser(object):
         """
         Constructor
         """
+<<<<<<< HEAD
+        self.delete = Delete("orders")
+=======
         self._delete = Delete("users")
+>>>>>>> discord
 
     def by_author_id(self, author_id):
         """
@@ -128,7 +132,11 @@ class DeleteUser(object):
 
         :param author_id:   author_id to delete by
         """
+<<<<<<< HEAD
+        self.delete.equals("author_id", author_id)
+=======
         self._delete.equals("author_id", author_id)
+>>>>>>> discord
 
     def in_city(self, city):
         """
@@ -136,7 +144,11 @@ class DeleteUser(object):
 
         :param city:   The city
         """
+<<<<<<< HEAD
+        self.delete.equals("city", city)
+=======
         self._delete.equals("city", city)
+>>>>>>> discord
 
     def in_state(self, state):
         """
@@ -144,7 +156,11 @@ class DeleteUser(object):
 
         :param state:   The state
         """
+<<<<<<< HEAD
+        self.delete.equals("state", state)
+=======
         self._delete.equals("state", state)
+>>>>>>> discord
 
     def in_zip(self, zip):
         """
@@ -152,14 +168,23 @@ class DeleteUser(object):
 
         :param zip:   The zip code
         """
+<<<<<<< HEAD
+        self.delete.equals("zip", zip)
+=======
         self._delete.equals("zip", zip)
+>>>>>>> discord
 
     def delete(self):
         """
         Delete the record
         """
+<<<<<<< HEAD
+        delete_record(self.delete)
+        self.delete = Delete("users")
+=======
         delete_record(self._delete)
         self._delete = Delete("users")
+>>>>>>> discord
 
 
 def create_users_table():
@@ -168,6 +193,8 @@ def create_users_table():
     """
     query = CreateTable("users", USER_TABLE_MAPPING)
     create_table(query)
+<<<<<<< HEAD
+=======
 
 
 def drop_users_table():
@@ -176,3 +203,4 @@ def drop_users_table():
     """
     query = DropTable("users")
     drop_table(query)
+>>>>>>> discord
